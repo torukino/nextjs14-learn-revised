@@ -1,6 +1,34 @@
 import { sql } from '@vercel/postgres'
 import { CustomerField, CustomersTableType, InvoiceForm, InvoicesTable, LatestInvoiceRaw, User, Revenue } from './definitions'
 import { formatCurrency } from './utils'
+import { firestore } from '@/app/lib/firebaseConfig'
+import { BANK } from '@/types/bank'
+import { unstable_noStore as noStore } from 'next/cache'
+
+export async function fetchFirestore(): Promise<any[]> {
+	noStore()
+	const data: BANK[] = []
+	await firestore
+		.collection('bank')
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				console.log(`${doc.id} => ${doc.data()}`)
+				data.push(doc.data() as BANK)
+			})
+		})
+		.catch(err => {
+			console.log('Error getting documents', err)
+		})
+	// dateでソート
+	data.sort((a, b) => {
+		if (a.date < b.date) return -1
+		if (a.date > b.date) return 1
+		return 0
+	})
+
+	return data
+}
 
 export async function fetchRevenue() {
 	// Add noStore() here prevent the response from being cached.

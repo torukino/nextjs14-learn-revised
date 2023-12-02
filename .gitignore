@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 serviceAccountKey.json
+public/bank.csv
+public/bank.json
+
 # dependencies
 /node_modules
 /.pnp
