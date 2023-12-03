@@ -3,20 +3,20 @@
 
 export interface BANK {
 	date: string
-	class: string
+	class?: string
 	reminder: string
-	inM: string
-	outM: string
+	inM?: string
+	outM?: string
 	resM: string
-	inI: string
-	outI: string
+	inI?: string
+	outI?: string
 	resI: string
-	inC: string
-	outC: string
+	inC?: string
+	outC?: string
 	resC: string
-	inH: string
+	inH?: string
 	outH: string
-	resH: string
+	resH?: string
 	res: string
 }
 

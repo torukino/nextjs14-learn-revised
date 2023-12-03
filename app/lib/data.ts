@@ -13,20 +13,63 @@ export async function fetchFirestore(): Promise<any[]> {
 		.get()
 		.then(querySnapshot => {
 			querySnapshot.forEach(doc => {
-				console.log(`${doc.id} => ${doc.data()}`)
+				// console.log(`${doc.id} => ${doc.data().date}`)
 				data.push(doc.data() as BANK)
 			})
 		})
 		.catch(err => {
 			console.log('Error getting documents', err)
 		})
+
 	// dateでソート
 	data.sort((a, b) => {
-		if (a.date < b.date) return -1
-		if (a.date > b.date) return 1
+		const dateA = new Date(a.date)
+		const dateB = new Date(b.date)
+		if (dateA < dateB) return -1
+		if (dateA > dateB) return 1
 		return 0
 	})
 
+	// data.forEach((d, i) => {
+	// 	console.log(`${i} => ${d.date}`)
+	// })
+
+	return data
+}
+
+export async function fetchLastestFirestore(): Promise<any[]> {
+	noStore()
+	const data: BANK[] = []
+	await firestore
+		.collection('bank')
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				// console.log(`${doc.id} => ${doc.data().date}`)
+				data.push(doc.data() as BANK)
+			})
+		})
+		.catch(err => {
+			console.log('Error getting documents', err)
+		})
+
+	// resMでソート
+	data.sort((a, b) => {
+		const resMA = parseInt(a.resM.replaceAll(',', ''))
+		const resMB = parseInt(b.resM.replaceAll(',', ''))
+		if (resMA < resMB) return -1
+		if (resMA > resMB) return 1
+		return 0
+	})
+
+	// data.forEach((d, i) => {
+	// 	console.log(`${i} => ${d.date}:${d.resM}`)
+	// })
+
+	const LIMIT = 5
+	if (data.length > LIMIT) {
+		return data.slice(0, LIMIT)
+	}
 	return data
 }
 

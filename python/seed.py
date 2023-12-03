@@ -25,13 +25,5 @@ for data in json_data:
         db.collection('bank').add(data)
     else:
         print(f"Invalid data: {data}")
-        
-for data in json_data:
-    # 非ASCII文字を含むキーを変更
-    if '\ufeffdate' in data:
-        data['date'] = data.pop('\ufeffdate')
-    # 各データが文字列で、空でないことを確認
-    if all(isinstance(key, str) and key for key, value in data.items()):
-        db.collection('bank').add(data)
-    else:
-        print(f"Invalid data: {data}")
+       
+f.close()
