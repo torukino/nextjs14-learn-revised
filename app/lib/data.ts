@@ -65,8 +65,8 @@ export async function fetchBankPages(reminder: string) {
 	const filteredReminders = reminders.filter(r => r.includes(reminder))
 	// filteredRemindersを有するdataを抽出
 	const filteredData = data.filter(d => filteredReminders.includes(d.reminder))
-
-	return data.length
+	const totalPages = Math.ceil(filteredData.length / BANK_ITEMS_PER_PAGE)
+	return totalPages
 }
 
 export async function fetchLastestFirestore(): Promise<any[]> {
