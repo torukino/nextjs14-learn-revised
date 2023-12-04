@@ -1,3 +1,6 @@
+import { DeleteBank, UpdateBank } from '@/app/ui/invoices/buttons'
+import { BANK } from '@/types/bank'
+import { initBANK } from '@/types/bank'
 // Loading animation
 const shimmer =
 	'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent'
@@ -53,6 +56,101 @@ export function InvoiceSkeleton() {
 				</div>
 			</div>
 			<div className="mt-2 h-4 w-12 rounded-md bg-gray-200" />
+		</div>
+	)
+}
+
+export function BanksSkeleton() {
+	const fdata: BANK[] = []
+	for (let i = 0; i < 6; i++) {
+		fdata.push(initBANK)
+	}
+
+	return (
+		<div className="mt-6 flow-root bg-gray-100">
+			<div className="inline-block min-w-full align-middle">
+				<div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+					<table className="w-full text-left">
+						<thead className="bg-white">
+							<tr>
+								<th scope="col" className="relative isolate py-3.5 pr-3 text-left text-sm font-semibold text-gray-200">
+									日付
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									分類
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									摘要
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									みずほ銀行入金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									みずほ銀行出金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									みずほ銀行残高
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群馬銀行入金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群馬銀行出金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群馬銀行残高
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群銀コロナ入金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群銀コロナ出金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群銀コロナ残高
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									郡銀法人入金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群銀法人出金
+								</th>
+								<th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-200">
+									群銀法人残高
+								</th>
+								<th scope="col" className="relative py-3 pl-6 pr-3">
+									<span className="sr-only">Edit</span>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{fdata.map((b, index) => (
+								<tr key={index}>
+									<td className="relative py-4 pr-3 text-sm font-medium text-gray-900">{b.date}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.class}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.reminder}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.inM}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.outM}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.resM}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.inI}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.outI}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.resI}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.inC}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.outC}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.resC}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.inH}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.outH}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.resH}</td>
+									<div className="flex justify-end gap-3">
+										<UpdateBank bank={b} />
+										<DeleteBank bank={b} />
+									</div>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	)
 }

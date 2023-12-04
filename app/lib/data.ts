@@ -4,7 +4,7 @@ import { formatCurrency } from './utils'
 import { firestore } from '@/app/lib/firebaseConfig'
 import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore } from 'next/cache'
-
+import { collection, query, where } from 'firebase/firestore'
 export async function fetchFirestore(): Promise<any[]> {
 	noStore()
 	const data: BANK[] = []
@@ -35,6 +35,38 @@ export async function fetchFirestore(): Promise<any[]> {
 	// })
 
 	return data
+}
+
+const BANK_ITEMS_PER_PAGE = 6
+export async function fetchFilteredBank(reminder: string, currentPage: number) {
+	const offset = (currentPage - 1) * BANK_ITEMS_PER_PAGE
+	const data = await fetchFirestore()
+	console.log('data.length', data.length)
+	const reminders: string[] = data.map(d => d.reminder)
+	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
+	const filteredReminders = reminders.filter(r => r.includes(reminder))
+	// filteredRemindersを有するdataを抽出
+	const filteredData = data.filter(d => filteredReminders.includes(d.reminder))
+
+	let data_: BANK[] = []
+	if (data.length > BANK_ITEMS_PER_PAGE) {
+		data_ = filteredData.slice(offset, offset + BANK_ITEMS_PER_PAGE)
+	} else {
+		data_ = filteredData
+	}
+
+	return data_
+}
+
+export async function fetchBankPages(reminder: string) {
+	const data: BANK[] = await fetchFirestore()
+	const reminders: string[] = data.map(d => d.reminder)
+	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
+	const filteredReminders = reminders.filter(r => r.includes(reminder))
+	// filteredRemindersを有するdataを抽出
+	const filteredData = data.filter(d => filteredReminders.includes(d.reminder))
+
+	return data.length
 }
 
 export async function fetchLastestFirestore(): Promise<any[]> {

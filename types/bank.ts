@@ -20,3 +20,21 @@ export interface BANK {
 	res: string
 }
 
+export const initBANK: BANK = {
+	date: '',
+	class: '',
+	reminder: '',
+	inM: '',
+	outM: '',
+	resM: '',
+	inI: '',
+	outI: '',
+	resI: '',
+	inC: '',
+	outC: '',
+	resC: '',
+	inH: '',
+	outH: '',
+	resH: '',
+	res: '',
+}
