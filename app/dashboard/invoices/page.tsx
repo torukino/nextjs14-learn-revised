@@ -1,12 +1,13 @@
-import ClientComponent from '@/app/ui/dashboard/client_component'
-import { myAction } from '@/app/lib/actions'
-import { fetchBankPages, fetchFirestore } from '@/app/lib/data'
-import { BANK } from '@/types/bank'
+import { fetchBankPages, fetchFirestore, fetchReminders } from '@/app/lib/data'
 import BankTable from '@/app/ui/invoices/bank-table'
 import { Suspense } from 'react'
 import Pagination from '@/app/ui/invoices/pagination'
 import { BanksSkeleton } from '@/app/ui/skeletons'
 import Search from '@/app/ui/search'
+import { CreateBank } from '@/app/ui/invoices/buttons'
+import { updateRemindersCollectionFromBankCollection } from '@/app/lib/data'
+import { REMINDER } from '@/types/reminder'
+
 export default async function Page({
 	searchParams,
 }: {
@@ -19,15 +20,19 @@ export default async function Page({
 	const currentPage = Number(searchParams?.page) || 1
 	const totalPages = await fetchBankPages(reminder)
 
+	// const reminders:REMINDER[] = await fetchReminders()
+	// console.log("reminders",reminders.length)
+	// if(reminders.length === 0){
+	// 	updateRemindersCollectionFromBankCollection()
+	// }
+
 	return (
 		<main>
-			<div className="flex w-full items-center justify-between">
-				<h1 className={` text-2xl ml-6`}>入出金明細</h1>
-			</div>
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+				<h1 className="text-2xl ">取引明細</h1>
 				<div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
 					<Search placeholder="摘要を検索..." />
-					{/* <CreateInvoice /> */}
+					<CreateBank />
 				</div>
 
 				<Suspense key={reminder + currentPage} fallback={<BanksSkeleton />}>

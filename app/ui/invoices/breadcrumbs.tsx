@@ -1,4 +1,4 @@
-import { clsx } from 'clsx'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { lusitana } from '@/app/ui/fonts'
 
@@ -7,7 +7,7 @@ interface Breadcrumb {
 	href: string
 	active?: boolean
 }
-
+// Breadcrumbの配列を受け取り、それを元にパンくずリストを生成する関数
 export default function Breadcrumbs({ breadcrumbs }: { breadcrumbs: Breadcrumb[] }) {
 	return (
 		<nav aria-label="Breadcrumb" className="mb-6 block">

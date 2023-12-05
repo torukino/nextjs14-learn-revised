@@ -5,6 +5,7 @@ import { firestore } from '@/app/lib/firebaseConfig'
 import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore } from 'next/cache'
 import { collection, query, where } from 'firebase/firestore'
+import { REMINDER } from '@/types/reminder'
 export async function fetchFirestore(): Promise<any[]> {
 	noStore()
 	const data: BANK[] = []
@@ -68,6 +69,50 @@ export async function fetchBankPages(reminder: string) {
 	const totalPages = Math.ceil(filteredData.length / BANK_ITEMS_PER_PAGE)
 	return totalPages
 }
+
+
+// remindersコレクションからreminderの配列を取得する
+export async function fetchReminders(): Promise<REMINDER[]> {
+	noStore()
+	const data: REMINDER[] = []
+	await firestore
+		.collection('reminder')
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				// console.log(`${doc.id} => ${doc.data().date}`)
+				data.push(doc.data() as REMINDER)
+			})
+		})
+		.catch(err => {
+			console.log('Error reminder collection', err)
+		})
+
+	return data
+}
+
+export async function updateReminders(reminder: REMINDER) {
+	const reminders: REMINDER[] = await fetchReminders()
+	const reminders_ = reminders.filter(r => r.reminder !== reminder.reminder)
+	reminders_.push(reminder)
+	await firestore.collection('reminder').doc('reminder').set({
+		reminders: reminders_
+	})
+}
+
+// "reminders"コレクションに、だぶりなしで追加保存する
+export async function updateRemindersCollectionFromBankCollection() {
+	const data:BANK[] = await fetchFirestore()
+	const remindersFromRemindersCollection:REMINDER[] = await fetchReminders()
+	const remindersFromBankCollection: string[] = data.map(d => d.reminder)
+	// remindersFromRemindersCollectionにはないremindersFromBankCollectionに含まれない要素を抽出
+	const reminders = remindersFromBankCollection.filter(r => !remindersFromRemindersCollection.map(r => r.reminder).includes(r))
+	// remindersを追加保存
+	for (const r of reminders) {
+		await firestore.collection('reminder').add({reminder: r})
+	}
+}
+
 
 export async function fetchLastestFirestore(): Promise<any[]> {
 	noStore()
