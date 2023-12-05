@@ -21,6 +21,9 @@ export default async function Page({
 
 	return (
 		<main>
+			<div className="flex w-full items-center justify-between">
+				<h1 className={` text-2xl ml-6`}>入出金明細</h1>
+			</div>
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
 					<Search placeholder="摘要を検索..." />
