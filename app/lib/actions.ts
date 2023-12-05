@@ -10,18 +10,16 @@ export async function myAction(formData: FormData) {
 }
 
 export async function createBank(formData: FormData): Promise<FormData> {
+	console.log('formData', JSON.stringify(formData))
+
 	// Insert data into the database
-	try {
-		await firestore.collection('bank').add(formData)
-	} catch (error) {
-		console.log('Error creating bank', error)
-	}
+	// try {
+	// 	await firestore.collection('bank').add(formData)
+	// } catch (error) {
+	// 	console.log('Error creating bank', error)
+	// }
 
 	// Revalidate the cache for the invoices page and redirect the user.
 	revalidatePath('/dashboard/invoices')
 	redirect('/dashboard/invoices')
-
-  return formData
-
-
 }
