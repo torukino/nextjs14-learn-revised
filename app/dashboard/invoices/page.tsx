@@ -8,6 +8,8 @@ import { CreateBank } from '@/app/ui/invoices/buttons'
 import { updateRemindersCollectionFromBankCollection } from '@/app/lib/data'
 import { REMINDER } from '@/types/reminder'
 
+const remindersInit: boolean = true
+
 export default async function Page({
 	searchParams,
 }: {
@@ -21,9 +23,12 @@ export default async function Page({
 	const totalPages = await fetchBankPages(reminder)
 
 	// console.log("reminders",reminders.length)
-	// if(reminders.length === 0){
-	// 	updateRemindersCollectionFromBankCollection()
-	// }
+	if (remindersInit) {
+		const reminders: REMINDER[] = await fetchReminders()
+		if (reminders.length === 0) {
+			updateRemindersCollectionFromBankCollection()
+		}
+	}
 
 	return (
 		<main>

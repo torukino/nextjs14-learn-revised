@@ -1,7 +1,7 @@
 # public/bank.csvを読み込んで、public/bank.jsonを作成する
 # 一行目にヘッダーがある
 # ヘッダーの内容
-# date,class,reminder,inM,outM,resM,inI,outI,resI,inC,outC,resC,inH,outH,resC,res,
+# date,status,reminder,inM,outM,resM,inI,outI,resI,inC,outC,resC,inH,outH,resC,res,
 
 import csv
 import json
@@ -26,7 +26,7 @@ for row in reader:
     data.append(row)
 
 
-# [0'\ufeffdate', 1'class', 2'reminder', 
+# [0'\ufeffdate', 1'status', 2'reminder', 
 #  3'inM', 'outM', 'resM', 
 #  6'inI', 'outI', 'resI', 
 #  9'inC', 'outC', 'resC', 

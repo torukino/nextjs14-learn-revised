@@ -1,14 +1,13 @@
 // 変数
 // date,class,reminder,inM,outM,resM,inI,outI,resI,inC,outC,resC,inH,outH,resC,res,
 
-import { REMINDER, initReminder } from '@/types/reminder'
-
 export interface BANK {
 	id: string
 	date: string
 	account?: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
-	class_?: 'auto' | 'hand' | 'undef'
-	reminder: REMINDER
+	status?: 'auto' | 'hand' | 'undef'
+	reminder: string
+	reminderId: string
 	inM?: string
 	outM?: string
 	resM: string
@@ -24,13 +23,13 @@ export interface BANK {
 	res: string
 }
 
-
 export const initBANK: BANK = {
 	id: '',
 	date: '',
-	class_: 'undef',
+	status: 'undef',
 	account: undefined,
-	reminder: initReminder,
+	reminder: '',
+	reminderId: '',
 	inM: '',
 	outM: '',
 	resM: '',
@@ -49,9 +48,10 @@ export const initBANK: BANK = {
 export interface BANK_INPUT {
 	id?: string // IDフィールド
 	date?: string | undefined // 日付フィールド
-	reminder?: REMINDER // 摘要フィールド
+	reminder?: string // 摘要フィールド
+	reminderId?: string
 	account?: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
-	class_?: 'auto' | 'hand' | 'undef'
+	status?: 'auto' | 'hand' | 'undef'
 	inAmount?: string // 入金額フィールド
 	outAmount?: string // 出金額フィールド
 }

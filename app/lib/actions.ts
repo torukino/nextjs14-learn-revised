@@ -11,13 +11,14 @@ import { convertFormDataintoBank } from '@/tools/convData'
 // }
 
 export async function createBank(formData: FormData) {
-	console.log('selectedReminder', formData.get('selectedReminder'))
-	console.log('formData', JSON.stringify(formData))
-	// const rawFormData = Object.fromEntries(formData.entries())
+	console.log(`selectedReminder, 
+	${formData.get('selectedReminder')} 
+	${formData.get('selectedReminderId')}`)
 
 	const rawFormData = {
 		date: formData.get('date'),
 		selectedReminder: formData.get('selectedReminder'),
+		selectedReminderId: formData.get('selectedReminderId'),
 		account: formData.get('account'),
 		inAmount: formData.get('inAmount'),
 		outAmount: formData.get('outAmount'),
@@ -25,8 +26,8 @@ export async function createBank(formData: FormData) {
 	}
 
 	const newBank = convertFormDataintoBank(rawFormData)
-
-	console.log('new bank data:', JSON.stringify(newBank))
+	console.log('rawFormData', JSON.stringify(rawFormData))
+	// console.log('new bank data:', JSON.stringify(newBank))
 
 	//新たに作成した銀行データを追加する
 

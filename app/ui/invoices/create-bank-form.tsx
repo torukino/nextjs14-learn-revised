@@ -12,18 +12,16 @@ import Select from 'react-select'
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }
 	// リマインダーの状態を保存するためのReactの状態を作成します
-	const [selectedReminder, setSelectedReminder] = React.useState<REMINDER>()
+	const [selectedReminder, setSelectedReminder] = React.useState<string>()
+	const [selectedReminderId, setSelectedReminderId] = React.useState<string>()
 
 	// 選択されたリマインダーを状態として保存するonChangeハンドラを作成します
 	function handleReminderChange(selectedOption: { label: string; value: string } | null) {
-		console.log('selectedOption', selectedOption)
+		selectedOption && console.log(`selectedOption, ${selectedOption.label}, ${selectedOption.value}`)
+
 		if (selectedOption) {
-			const reminder: REMINDER = {
-				id: selectedOption.value,
-				reminder: selectedOption.label,
-			}
-			console.log('reminder', reminder)
-			setSelectedReminder(reminder)
+			setSelectedReminder(selectedOption.label)
+			setSelectedReminderId(selectedOption.value)
 		}
 	}
 	//   const [state, dispatch] = useFormState(createBank, initialState);
@@ -33,7 +31,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 		label: r.reminder,
 		value: r.id,
 	}))
-	// console.log("reminders", reminders)
+	// console.log('reminders', optionsReminder)
 	return (
 		<form action={createBank}>
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -55,7 +53,8 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 
 				{/* 摘要を選ぶ */}
 				<div className="mb-4">
-					<input type="hidden" name="selectedReminder" value={selectedReminder ? selectedReminder.reminder : ''} />
+					<input type="hidden" name="selectedReminder" value={selectedReminder || ''} />
+					<input type="hidden" name="selectedReminderId" value={selectedReminderId || ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
 					</label>
@@ -84,7 +83,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									id="auto"
 									name="status"
 									type="radio"
-									value="pending"
+									value="auto"
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
@@ -99,14 +98,14 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									id="hand"
 									name="status"
 									type="radio"
-									value="paid"
+									value="hand"
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
 									htmlFor="hand"
 									className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
 								>
-									振込 <CheckIcon className="h-4 w-4" />
+									手動振込 <CheckIcon className="h-4 w-4" />
 								</label>
 							</div>
 							<div className="flex items-center">
@@ -114,7 +113,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									id="undef"
 									name="status"
 									type="radio"
-									value="paid"
+									value="undef"
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label

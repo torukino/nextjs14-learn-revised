@@ -1,5 +1,5 @@
 import { BANK, BANK_INPUT } from '@/types/bank'
-import { initReminder } from '@/types/reminder'
+import { REMINDER, initReminder } from '@/types/reminder'
 
 export const convertFormDataintoBank = (rawFormData: any): BANK => {
 	// const rawFormData = {
@@ -13,10 +13,10 @@ export const convertFormDataintoBank = (rawFormData: any): BANK => {
 
 	const id = rawFormData.id || ''
 	const date = rawFormData.date || ''
-	const class_ = rawFormData.class || ''
+	const status = rawFormData.status || ''
 	const account = rawFormData.account || ''
-	const reminder = rawFormData.selectedReminder || initReminder
-
+	const reminder = rawFormData.selectedReminder || ''
+	const reminderId = rawFormData.selectedReminderId || ''
 	let inM = ''
 	let outM = ''
 	let inI = ''
@@ -42,8 +42,9 @@ export const convertFormDataintoBank = (rawFormData: any): BANK => {
 	return {
 		id: id,
 		date: date,
-		class: class_,
+		status: status,
 		reminder: reminder,
+		reminderId: reminderId,
 		inM: inM,
 		outM: outM,
 		resM: '',
