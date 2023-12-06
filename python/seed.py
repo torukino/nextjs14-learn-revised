@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 
-# Use a service account.
+# Use a service account
 cred = credentials.Certificate('serviceAccountKey.json')
 app = firebase_admin.initialize_app(cred)
 db = firestore.client()
@@ -22,7 +22,10 @@ json_data = json.load(f)
 for data in json_data:
     # 各データが文字列で、空でないことを確認
     if all(isinstance(key, str) and key for key, value in data.items()):
-        db.collection('bank').add(data)
+        doc_ref = db.collection('bank').document()
+        data['id'] = doc_ref.id
+        # データをドキュメントに追加
+        doc_ref.set(data)
     else:
         print(f"Invalid data: {data}")
        

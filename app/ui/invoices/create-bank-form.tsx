@@ -10,32 +10,31 @@ import { createBank } from '@/app/lib/actions'
 import Select from 'react-select'
 
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
-	const initBANK = {
-		date: '', // 日付フィールド
-		reminder: '', // 摘要フィールド
-		status: '', // 分類フィールド
-		account: '', // 銀行口座フィールド
-		inAmount: '', // 入金額フィールド
-		outAmount: '', // 出金額フィールド
+	const initialState = { message: null, errors: {} }
+	// リマインダーの状態を保存するためのReactの状態を作成します
+	const [selectedReminder, setSelectedReminder] = React.useState<REMINDER>()
+
+	// 選択されたリマインダーを状態として保存するonChangeハンドラを作成します
+function handleReminderChange(selectedOption: { label: string; value: string } | null) {
+	if (selectedOption) {
+		const reminder: REMINDER = {
+			id: selectedOption.value,
+			reminder: selectedOption.label,
+		}
+		setSelectedReminder(reminder)
+		console.log('reminder', reminder)
 	}
-
-	const initFormData = new FormData()
-	Object.entries(initBANK).forEach(([key, value]) => {
-		initFormData.append(key, value)
-	})
-
-	console.log('@@ initFormData', initFormData)
-
-	const [state, dispatch] = useFormState(createBank, initFormData)
+}
+	//   const [state, dispatch] = useFormState(createBank, initialState);
 
 	// リマインダーの配列をラベルと値のペアに変換
-	const options = reminders.map((r: REMINDER) => ({
-		label: r.reminder.toString(),
-		value: r.reminder.toString(),
+	const optionsReminder = reminders.map((r: REMINDER) => ({
+		label: r.reminder,
+		value: r.id,
 	}))
 	// console.log("reminders", reminders)
 	return (
-		<form action={dispatch}>
+		<form action={createBank}>
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 日付 */}
 				<div className="mb-4">
@@ -55,13 +54,14 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 
 				{/* 摘要を選ぶ */}
 				<div className="mb-4">
+					<input type="hidden" name="selectedReminder" value={selectedReminder ? JSON.stringify(selectedReminder) : ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
 					</label>
 					<div className="relative">
 						<Select
-							instanceId="my-unique-select-id"
-							options={options}
+							options={optionsReminder}
+							onChange={handleReminderChange}
 							styles={{
 								singleValue: provided => ({ ...provided, paddingLeft: '30px' }),
 								placeholder: provided => ({ ...provided, paddingLeft: '30px' }),
@@ -143,7 +143,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 						<option value="" disabled>
 							銀行口座の選択
 						</option>
-						{['-', 'みずほ銀行', '群銀個人', '群銀コロナ', '群銀法人'].map((r, index) => (
+						{['みずほ銀行', '群銀個人', '群銀コロナ', '群銀法人'].map((r, index) => (
 							<option key={index} value={r.toString()}>
 								{r.toString()}
 							</option>

@@ -1,3 +1,9 @@
 export interface REMINDER {
-reminder: string
+	id: string
+	reminder: string
+}
+
+export const initReminder: REMINDER = {
+	id: '',
+	reminder: '',
 }

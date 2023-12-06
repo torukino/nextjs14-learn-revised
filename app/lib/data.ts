@@ -61,14 +61,15 @@ export async function fetchFilteredBank(reminder: string, currentPage: number) {
 
 export async function fetchBankPages(reminder: string) {
 	const data: BANK[] = await fetchFirestore()
-	const reminders: string[] = data.map(d => d.reminder)
+	const reminders: REMINDER[] = data.map(d => d.reminder)
 	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
-	const filteredReminders = reminders.filter(r => r.includes(reminder))
+	const filteredReminders = reminders.filter((r:REMINDER) => r?.reminder && r.reminder.includes(reminder))
 	// filteredRemindersを有するdataを抽出
 	const filteredData = data.filter(d => filteredReminders.includes(d.reminder))
 	const totalPages = Math.ceil(filteredData.length / BANK_ITEMS_PER_PAGE)
 	return totalPages
 }
+
 
 
 // remindersコレクションからreminderの配列を取得する
@@ -101,18 +102,35 @@ export async function updateReminders(reminder: REMINDER) {
 }
 
 // "reminders"コレクションに、だぶりなしで追加保存する
+// export async function updateRemindersCollectionFromBankCollection() {
+// 	const data:BANK[] = await fetchFirestore()
+// 	const remindersFromRemindersCollection:REMINDER[] = await fetchReminders()
+// 	const remindersFromBankCollection: string[] = data.map(d => d.reminder)
+// 	// remindersFromRemindersCollectionにはないremindersFromBankCollectionに含まれない要素を抽出
+// 	const reminders = remindersFromBankCollection.filter(r => !remindersFromRemindersCollection.map(r => r.reminder).includes(r))
+// 	// remindersを追加保存
+// 	for (const r of reminders) {
+// 		await firestore.collection('reminder').add({reminder: r})
+// 	}
+// }
+
+// "reminders"コレクションに、だぶりなしで追加保存する
 export async function updateRemindersCollectionFromBankCollection() {
 	const data:BANK[] = await fetchFirestore()
 	const remindersFromRemindersCollection:REMINDER[] = await fetchReminders()
-	const remindersFromBankCollection: string[] = data.map(d => d.reminder)
+	const remindersFromBankCollection: string[] = data.map(d => d.reminder.reminder)
 	// remindersFromRemindersCollectionにはないremindersFromBankCollectionに含まれない要素を抽出
 	const reminders = remindersFromBankCollection.filter(r => !remindersFromRemindersCollection.map(r => r.reminder).includes(r))
 	// remindersを追加保存
 	for (const r of reminders) {
-		await firestore.collection('reminder').add({reminder: r})
+		// 新しいドキュメントの参照を作成
+		const newDocRef = firestore.collection('reminder').doc();
+		// 新しいドキュメントのIDを取得
+		const newDocId = newDocRef.id;
+		// ドキュメントを作成し、IDもフィールドに保存
+		await newDocRef.set({reminder: r, id: newDocId})
 	}
 }
-
 
 export async function fetchLastestFirestore(): Promise<any[]> {
 	noStore()
