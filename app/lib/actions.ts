@@ -11,6 +11,7 @@ import { convertFormDataintoBank } from '@/tools/convData'
 // }
 
 export async function createBank(formData: FormData) {
+	console.log('selectedReminder', formData.get('selectedReminder'))
 	console.log('formData', JSON.stringify(formData))
 	// const rawFormData = Object.fromEntries(formData.entries())
 

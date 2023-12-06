@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { CheckIcon, ClockIcon, CurrencyYenIcon, UserCircleIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/app/ui/button'
 import React from 'react'
-import { REMINDER } from '@/types/reminder'
+import { REMINDER, initReminder } from '@/types/reminder'
 import { useFormState } from 'react-dom'
 
 import { createBank } from '@/app/lib/actions'
@@ -15,16 +15,17 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const [selectedReminder, setSelectedReminder] = React.useState<REMINDER>()
 
 	// 選択されたリマインダーを状態として保存するonChangeハンドラを作成します
-function handleReminderChange(selectedOption: { label: string; value: string } | null) {
-	if (selectedOption) {
-		const reminder: REMINDER = {
-			id: selectedOption.value,
-			reminder: selectedOption.label,
+	function handleReminderChange(selectedOption: { label: string; value: string } | null) {
+		console.log('selectedOption', selectedOption)
+		if (selectedOption) {
+			const reminder: REMINDER = {
+				id: selectedOption.value,
+				reminder: selectedOption.label,
+			}
+			console.log('reminder', reminder)
+			setSelectedReminder(reminder)
 		}
-		setSelectedReminder(reminder)
-		console.log('reminder', reminder)
 	}
-}
 	//   const [state, dispatch] = useFormState(createBank, initialState);
 
 	// リマインダーの配列をラベルと値のペアに変換
@@ -54,7 +55,7 @@ function handleReminderChange(selectedOption: { label: string; value: string } |
 
 				{/* 摘要を選ぶ */}
 				<div className="mb-4">
-					<input type="hidden" name="selectedReminder" value={selectedReminder ? JSON.stringify(selectedReminder) : ''} />
+					<input type="hidden" name="selectedReminder" value={selectedReminder ? selectedReminder.reminder : ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
 					</label>
