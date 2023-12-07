@@ -95,7 +95,7 @@ export default async function BankTable({ reminder, currentPage }: { reminder: s
 							{fdata.map((b, index) => (
 								<tr key={index}>
 									<td className="relative py-4 pr-3 text-sm font-medium text-gray-900">{b.date}</td>
-									<td className="px-3 py-4 text-sm text-gray-500">{b.class}</td>
+									<td className="px-3 py-4 text-sm text-gray-500">{b.status}</td>
 									<td className="px-3 py-4 text-sm text-gray-500">{b.reminder}</td>
 									<td className="px-3 py-4 text-sm text-gray-500">{b.inM}</td>
 									<td className="px-3 py-4 text-sm text-gray-500">{b.outM}</td>
