@@ -17,6 +17,9 @@ export const convertFormDataintoBank = (rawFormData: any): BANK => {
 	const account = rawFormData.account || ''
 	const reminder = rawFormData.selectedReminder || ''
 	const reminderId = rawFormData.selectedReminderId || ''
+	const inAmountStr: string = rawFormData.inAmount ? Number(rawFormData.inAmount).toLocaleString() : ''
+	const outAmountStr: string = rawFormData.outAmount ? Number(rawFormData.outAmount).toLocaleString() : ''
+
 	let inM = ''
 	let outM = ''
 	let inI = ''
@@ -27,17 +30,17 @@ export const convertFormDataintoBank = (rawFormData: any): BANK => {
 	let outH = ''
 
 	if (account === 'みずほ銀行') {
-		inM = rawFormData.inM || ''
-		outM = rawFormData.outM || ''
+		inM = inAmountStr
+		outM = outAmountStr
 	} else if (account === '群銀個人') {
-		inI = rawFormData.inI || ''
-		outI = rawFormData.outI || ''
+		inI = inAmountStr
+		outI = outAmountStr
 	} else if (account === '群銀コロナ') {
-		inC = rawFormData.inC || ''
-		outC = rawFormData.outC || ''
+		inC = inAmountStr
+		outC = outAmountStr
 	} else if (account === '群銀法人') {
-		inH = rawFormData.inH || ''
-		outH = rawFormData.outH || ''
+		inH = inAmountStr
+		outH = outAmountStr
 	}
 	return {
 		id: id,

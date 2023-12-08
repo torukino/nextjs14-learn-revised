@@ -20,14 +20,14 @@ export async function createBank(formData: FormData) {
 		selectedReminder: formData.get('selectedReminder'),
 		selectedReminderId: formData.get('selectedReminderId'),
 		account: formData.get('account'),
-		inAmount: formData.get('inAmount'),
-		outAmount: formData.get('outAmount'),
+		inAmount: Number(formData.get('inAmount')),
+		outAmount: Number(formData.get('outAmount')),
 		status: formData.get('status'),
 	}
 
 	const newBank = convertFormDataintoBank(rawFormData)
 	console.log('rawFormData', JSON.stringify(rawFormData))
-	// console.log('new bank data:', JSON.stringify(newBank))
+	console.log('new bank data:', JSON.stringify(newBank))
 
 	//新たに作成した銀行データを追加する
 

@@ -52,8 +52,8 @@ export interface BANK_INPUT {
 	reminderId?: string
 	account?: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
 	status?: 'auto' | 'hand' | 'undef'
-	inAmount?: string // 入金額フィールド
-	outAmount?: string // 出金額フィールド
+	inAmount?: number // 入金額フィールド
+	outAmount?: number // 出金額フィールド
 }
 
 export type StateBank = {
