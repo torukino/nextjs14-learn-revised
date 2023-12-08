@@ -1,4 +1,3 @@
-import 'server-only'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getApps, initializeApp, cert } from 'firebase-admin/app'
 import { readFileSync } from 'fs'

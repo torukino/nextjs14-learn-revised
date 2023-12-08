@@ -4,7 +4,6 @@ import { formatCurrency } from './utils'
 import { firestore } from '@/app/lib/firebaseConfig'
 import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore } from 'next/cache'
-import { collection, query, where } from 'firebase/firestore'
 import { REMINDER } from '@/types/reminder'
 export async function fetchFirestore(): Promise<any[]> {
 	noStore()
@@ -37,6 +36,7 @@ export async function fetchFirestore(): Promise<any[]> {
 
 	return data
 }
+
 
 const BANK_ITEMS_PER_PAGE = 6
 export async function fetchFilteredBank(reminder: string, currentPage: number) {

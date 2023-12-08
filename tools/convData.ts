@@ -46,6 +46,7 @@ export const convertFormDataintoBank = (rawFormData: any): BANK => {
 		id: id,
 		date: date,
 		status: status,
+		account: account,
 		reminder: reminder,
 		reminderId: reminderId,
 		inM: inM,

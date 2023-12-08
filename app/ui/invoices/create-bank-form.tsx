@@ -45,6 +45,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							type="date"
 							id="date"
 							name="date"
+							min="2023-10-02"
 							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 						/>
 						<ClockIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
@@ -62,6 +63,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 						<Select
 							options={optionsReminder}
 							onChange={handleReminderChange}
+							required
 							styles={{
 								singleValue: provided => ({ ...provided, paddingLeft: '30px' }),
 								placeholder: provided => ({ ...provided, paddingLeft: '30px' }),
@@ -114,6 +116,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									name="status"
 									type="radio"
 									value="undef"
+									checked={true}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
