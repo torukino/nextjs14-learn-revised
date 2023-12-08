@@ -22,7 +22,7 @@ export const recalculationBank = (allBank: BANK[]): BANK[] => {
 	for (let i = 0; i < allBank.length; i++) {
 		const bank = { ...allBank[i] }
 		if (bank.account === 'みずほ銀行') {
-			// console.log('bank.account in', bank.account)
+			console.log('bank.account in', bank.account)
 			if (bank.inM && bank.inM !== '') {
 				RESM += Number(bank.inM.replace(/,/g, ''))
 			}
@@ -33,7 +33,7 @@ export const recalculationBank = (allBank: BANK[]): BANK[] => {
 			if (bank.inI && bank.inI !== '') {
 				RESI += Number(bank.inI.replace(/,/g, ''))
 			}
-			if (bank.outI && bank.outM !== '') {
+			if (bank.outI && bank.outI !== '') {
 				RESI -= Number(bank.outI.replace(/,/g, ''))
 			}
 		} else if (bank.account === '群銀コロナ') {

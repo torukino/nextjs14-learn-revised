@@ -111,7 +111,7 @@ export default async function BankTable({ reminder, currentPage }: { reminder: s
 									<td className="px-3 py-4 text-sm text-gray-500">{b.resH}</td>
 									<div className="flex justify-end gap-3">
 										<UpdateBank bank={b} />
-										<DeleteBank bank={b} />
+										<DeleteBank id={b.id} />
 									</div>
 								</tr>
 							))}

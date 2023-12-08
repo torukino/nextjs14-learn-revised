@@ -1,4 +1,4 @@
-import { fetchBankPages, fetchFirestore, fetchReminders } from '@/app/lib/data'
+import { fetchBankPages, fetchReminders } from '@/app/lib/data'
 import BankTable from '@/app/ui/invoices/bank-table'
 import { Suspense } from 'react'
 import Pagination from '@/app/ui/invoices/pagination'

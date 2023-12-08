@@ -1,3 +1,4 @@
+import { deleteBank } from '@/app/lib/actions'
 import { BANK } from '@/types/bank'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
@@ -10,14 +11,15 @@ export function UpdateBank({ bank }: { bank: BANK }) {
 	)
 }
 
-export function DeleteBank({ bank }: { bank: BANK }) {
+export function DeleteBank({ id }: { id: string }) {
+	const deleteInvoiceWithId = deleteBank.bind(null, id)
 	return (
-		<>
+		<form action={deleteInvoiceWithId}>
 			<button className="rounded-md border p-2 hover:bg-gray-100">
 				<span className="sr-only">Delete</span>
 				<TrashIcon className="w-5" />
 			</button>
-		</>
+		</form>
 	)
 }
 
@@ -31,7 +33,6 @@ export function CreateBank() {
 		</Link>
 	)
 }
-
 
 export function CreateInvoice() {
 	return (

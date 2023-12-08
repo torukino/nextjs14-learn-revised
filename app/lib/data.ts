@@ -3,9 +3,33 @@ import { CustomerField, CustomersTableType, InvoiceForm, InvoicesTable, LatestIn
 import { formatCurrency } from './utils'
 import { firestore } from '@/app/lib/firebaseConfig'
 import { BANK } from '@/types/bank'
-import { unstable_noStore as noStore } from 'next/cache'
+import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { REMINDER } from '@/types/reminder'
-export async function fetchFirestore(): Promise<any[]> {
+
+export async function updateBank(bank: BANK): Promise<void> {
+	noStore()
+	console.log('updateBank id:', bank.id, JSON.stringify(bank))
+	try {
+		await firestore.collection('bank').doc(bank.id).set(bank)
+	} catch (error) {
+		console.log('Error bank collection', error)
+		throw new Error('Failed to update bank.')
+	}
+}
+
+export async function fetchReminderById(id: string): Promise<string | null> {
+	noStore()
+	try {
+		const reminder = await firestore.collection('reminder').doc(id).get()
+		return reminder.data()?.reminder
+	} catch (error) {
+		console.log('Error reminder collection', error)
+		throw new Error('Failed to fetch reminder.')
+		return null
+	}
+}
+
+export async function fetchAllBank(): Promise<any[]> {
 	noStore()
 	const data: BANK[] = []
 	await firestore
@@ -37,11 +61,10 @@ export async function fetchFirestore(): Promise<any[]> {
 	return data
 }
 
-
 const BANK_ITEMS_PER_PAGE = 6
 export async function fetchFilteredBank(reminder: string, currentPage: number) {
 	const offset = (currentPage - 1) * BANK_ITEMS_PER_PAGE
-	const data = await fetchFirestore()
+	const data = await fetchAllBank()
 	console.log('data.length', data.length)
 	const reminders: string[] = data.map(d => d.reminder)
 	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
@@ -60,7 +83,7 @@ export async function fetchFilteredBank(reminder: string, currentPage: number) {
 }
 
 export async function fetchBankPages(reminder: string) {
-	const data: BANK[] = await fetchFirestore()
+	const data: BANK[] = await fetchAllBank()
 	const reminders: string[] = data.map(d => d.reminder)
 	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
 	const filteredReminders = reminders.filter((r: string) => r.includes(reminder))
@@ -114,7 +137,7 @@ export async function updateReminders(reminder: REMINDER) {
 
 // "reminders"コレクションに、だぶりなしで追加保存する
 export async function updateRemindersCollectionFromBankCollection() {
-	const data: BANK[] = await fetchFirestore()
+	const data: BANK[] = await fetchAllBank()
 	const remindersFromRemindersCollection: REMINDER[] = await fetchReminders()
 	const remindersFromBankCollection: string[] = data.map(d => d.reminder)
 	// remindersFromRemindersCollectionにはないremindersFromBankCollectionに含まれない要素を抽出
