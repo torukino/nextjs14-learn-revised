@@ -45,6 +45,6 @@ export async function createBank(formData: FormData) {
 	// console.log(`${n2.date} 入金: ${n2.inM} 出金: ${n2.outM} 残高: ${n2.resM}`)
 	// console.log(`${n1.date} 入金: ${n1.inM} 出金: ${n1.outM} 残高: ${n1.resM}`)
 
-	revalidatePath('/dashboard/invoices')
+	// revalidatePath('/dashboard/invoices')
 	redirect('/dashboard/invoices')
 }

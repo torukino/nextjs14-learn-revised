@@ -1,5 +1,5 @@
 import { BANK } from '@/types/bank'
-import { collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore'
 import { FirebaseError } from 'firebase/app'
 import { app } from '@/app/lib/firebaseConfigClient'
 
@@ -31,9 +31,11 @@ export async function fetchAllBankClient(): Promise<BANK[]> {
 export async function updateBankClient(bank: BANK): Promise<void> {
 	const db = getFirestore(app)
 	try {
-		if (bank.id) {
-			const ref = doc(db, 'bank', bank.id)
-			bank.id = ref.id
+		if (!bank.id) {
+			console.log('updateBankClient date', bank.date, bank.id)
+			const docRef = await addDoc(collection(db, 'bank'), bank)
+			bank.id = docRef.id
+			console.log('updateBankClient date', bank.date, bank.id)
 		}
 		const ref = doc(db, 'bank', bank.id)
 		await setDoc(ref, bank)
