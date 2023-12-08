@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { convertFormDataintoBank } from '@/tools/convData'
 import { fetchFirestore } from '@/app/lib/data'
 import { recalculationBank } from '@/tools/recalculationBank'
-import { fetchAllBankClient } from '@/app/lib/dataClient'
+import { fetchAllBankClient, updateBankClient } from '@/app/lib/dataClient'
 
 // export async function myAction(formData: FormData) {
 // 	// console.log('formData', formData.get('name'))
@@ -13,8 +13,8 @@ import { fetchAllBankClient } from '@/app/lib/dataClient'
 // }
 
 export async function createBank(formData: FormData) {
-	// console.log(`selectedReminder, 
-	// ${formData.get('selectedReminder')} 
+	// console.log(`selectedReminder,
+	// ${formData.get('selectedReminder')}
 	// ${formData.get('selectedReminderId')}`)
 
 	const rawFormData = {
@@ -36,22 +36,15 @@ export async function createBank(formData: FormData) {
 	allBank.push(newBank)
 	const newAllBank = await recalculationBank(allBank)
 
-	const n1 = newAllBank[newAllBank.length - 1]
-	const n2 = newAllBank[newAllBank.length - 2]
+	newAllBank.forEach(async bank => {
+		await updateBankClient(bank)
+	})
 
-	console.log(`${n2.date} 入金: ${n2.inM} 出金: ${n2.outM} 残高: ${n2.resM}`)
-	console.log(`${n1.date} 入金: ${n1.inM} 出金: ${n1.outM} 残高: ${n1.resM}`)
+	// const n1 = newAllBank[newAllBank.length - 1]
+	// const n2 = newAllBank[newAllBank.length - 2]
+	// console.log(`${n2.date} 入金: ${n2.inM} 出金: ${n2.outM} 残高: ${n2.resM}`)
+	// console.log(`${n1.date} 入金: ${n1.inM} 出金: ${n1.outM} 残高: ${n1.resM}`)
 
-	//新たに作成した銀行データを追加する
-
-	// Insert data into the database
-	// try {
-	// 	await firestore.collection('bank').add(formData)
-	// } catch (error) {
-	// 	console.log('Error creating bank', error)
-	// }
-
-	// Revalidate the cache for the invoices page and redirect the user.
-	// revalidatePath('/dashboard/invoices')
-	// redirect('/dashboard/invoices')
+	revalidatePath('/dashboard/invoices')
+	redirect('/dashboard/invoices')
 }

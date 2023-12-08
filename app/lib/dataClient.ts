@@ -27,3 +27,18 @@ export async function fetchAllBankClient(): Promise<BANK[]> {
 		return []
 	}
 }
+
+export async function updateBankClient(bank: BANK): Promise<void> {
+	const db = getFirestore(app)
+	try {
+		if (bank.id) {
+			const ref = doc(db, 'bank', bank.id)
+			bank.id = ref.id
+		}
+		const ref = doc(db, 'bank', bank.id)
+		await setDoc(ref, bank)
+	} catch (e) {
+		const error = e as FirebaseError
+		alert(`銀行コレクションの更新（）:エラーコード:${error.code}\nエラーメッセージ:${error.message}`)
+	}
+}

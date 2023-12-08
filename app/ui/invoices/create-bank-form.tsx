@@ -45,6 +45,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							type="date"
 							id="date"
 							name="date"
+							required
 							min="2023-10-02"
 							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 						/>
