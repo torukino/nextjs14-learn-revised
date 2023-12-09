@@ -18,6 +18,7 @@ export async function deleteBank(id: string): Promise<void> {
 	const allBank: BANK[] = await fetchAllBank()
 
 	const newAllBank = recalculationBank(allBank)
+	console.log(`newAllBank: ${JSON.stringify(newAllBank)}`)
 	newAllBank.forEach(async bank => {
 		await updateBank(bank)
 	})

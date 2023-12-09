@@ -1,5 +1,5 @@
 import { BANK } from '@/types/bank'
-
+const BUG = true
 export const recalculationBank = (allBank: BANK[]): BANK[] => {
 	const newAllBank: BANK[] = []
 	allBank.sort((a, b) => {
@@ -22,12 +22,15 @@ export const recalculationBank = (allBank: BANK[]): BANK[] => {
 	for (let i = 0; i < allBank.length; i++) {
 		const bank = { ...allBank[i] }
 		if (bank.account === 'みずほ銀行') {
-			console.log('bank.account in', bank.account)
+			BUG && console.log('bank.account in', bank.account)
 			if (bank.inM && bank.inM !== '') {
+				BUG && console.log(`bank.inM in:${bank.date} ${bank.reminder} ${bank.inM}`)
 				RESM += Number(bank.inM.replace(/,/g, ''))
 			}
 			if (bank.outM && bank.outM !== '') {
+				BUG && console.log(`bank.outM in:${bank.date} ${bank.reminder} ${bank.outM}`)
 				RESM -= Number(bank.outM.replace(/,/g, ''))
+				
 			}
 		} else if (bank.account === '群銀個人') {
 			if (bank.inI && bank.inI !== '') {

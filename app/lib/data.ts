@@ -6,13 +6,24 @@ import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { REMINDER } from '@/types/reminder'
 
+const BUG = false
+
+
 export async function updateBank(bank: BANK): Promise<void> {
 	noStore()
-	console.log('updateBank id:', bank.id, JSON.stringify(bank))
+	BUG && console.log('updateBank id:', bank.id, JSON.stringify(bank))
+	//もし、bank.idがなければ、firestoreからドキュメントを取得して、bank.idを取得する
+	console.log('updateBank id:', bank.id||"idない", JSON.stringify(bank))
+	if (!bank.id) {
+		//新たにfirestoreにドキュメントを追加して、bank.idを取得する
+		const id = firestore.collection('bank').doc().id
+		bank = { ...bank, id: id }
+		BUG && console.log('updateBank id:', bank.id, JSON.stringify(bank))
+	}
 	try {
 		await firestore.collection('bank').doc(bank.id).set(bank)
 	} catch (error) {
-		console.log('Error bank collection', error)
+		BUG && console.log('Error bank collection', error)
 		throw new Error('Failed to update bank.')
 	}
 }
@@ -23,7 +34,7 @@ export async function fetchReminderById(id: string): Promise<string | null> {
 		const reminder = await firestore.collection('reminder').doc(id).get()
 		return reminder.data()?.reminder
 	} catch (error) {
-		console.log('Error reminder collection', error)
+		BUG && console.log('Error reminder collection', error)
 		throw new Error('Failed to fetch reminder.')
 		return null
 	}
