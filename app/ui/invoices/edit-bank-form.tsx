@@ -18,7 +18,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 	}))
 	return (
 		<form action={updateBank}>
-			<input type="hidden" name="id" value={bank.id} />
+			<input type="hidden" name="id" defaultValue={bank.id} />
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 日付 */}
 				<div className="mb-4">
@@ -32,6 +32,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 							name="date"
 							required
 							value={bank.date} // 初期値を設定
+							onChange={e => setBank({ ...bank, date: e.target.value })}
 							min="2023-10-02"
 							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 						/>
@@ -49,6 +50,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 							id="reminderId"
 							name="reminder"
 							value={bank.reminderId} // 初期値を設定
+							onChange={e => setBank({ ...bank, reminderId: e.target.value })}
 							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 						>
 							<option value="">選択してください</option>
@@ -73,7 +75,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 									name="status"
 									type="radio"
 									value="auto"
-									defaultChecked={bank.status === 'auto'}
+									checked={bank.status === 'auto'}
 									onChange={e => setBank({ ...bank, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
@@ -90,7 +92,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 									name="status"
 									type="radio"
 									value="hand"
-									defaultChecked={bank.status === 'hand'}
+									checked={bank.status === 'hand'}
 									onChange={e => setBank({ ...bank, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
@@ -107,7 +109,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 									name="status"
 									type="radio"
 									value="undef"
-									defaultChecked={bank.status === 'undef'}
+									checked={bank.status === 'undef'}
 									onChange={e => setBank({ ...bank, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
@@ -132,7 +134,8 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 							id="account"
 							name="account"
 							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-							defaultValue={bank.account}
+							value={bank.account}
+							onChange={e => setBank({ ...bank, account: e.target.value })}
 						>
 							<option value="" disabled>
 								銀行口座の選択
@@ -159,7 +162,8 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 								name="inAmount"
 								type="number"
 								step="1"
-								defaultValue={bank.inAmount}
+								value={bank.inAmount}
+								onChange={e => setBank({ ...bank, inAmount: Number(e.target.value) })}
 								placeholder="入金額を入力"
 								className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 							/>
@@ -180,7 +184,8 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 								name="outAmount"
 								type="number"
 								step="1"
-								defaultValue={bank.outAmount}
+								value={bank.outAmount}
+								onChange={e => setBank({ ...bank, outAmount: Number(e.target.value) })}
 								placeholder="出金額を入力"
 								className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
 							/>

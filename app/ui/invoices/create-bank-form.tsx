@@ -135,7 +135,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									name="status"
 									type="radio"
 									value="undef"
-									defaultChecked={true} // ここにdefaultCheckedを使用します
+									checked={true} // ここにdefaultCheckedを使用します
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label

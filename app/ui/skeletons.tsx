@@ -1,4 +1,4 @@
-import { DeleteBank, DeleteBankButton, UpdateBank, UpdateBankButton } from '@/app/ui/invoices/buttons'
+import { DeleteBankButton, UpdateBankButton } from '@/app/ui/invoices/buttons'
 import { BANK } from '@/types/bank'
 import { initBANK } from '@/types/bank'
 // Loading animation

@@ -4,7 +4,7 @@
 export interface BANK {
 	id: string
 	date: string
-	account: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
+	account: string | undefined
 	status: string | undefined
 	reminder: string
 	reminderId: string
@@ -50,7 +50,7 @@ export interface BANKINPUT {
 	date?: string | undefined // 日付フィールド
 	reminder?: string // 摘要フィールド
 	reminderId?: string
-	account?: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
+	account?: string | undefined
 	status?: string
 	inAmount?: number // 入金額フィールド
 	outAmount?: number // 出金額フィールド
