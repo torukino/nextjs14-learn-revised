@@ -10,7 +10,7 @@ import { USER } from '@/types/user'
 
 const BUG = false
 
-export async function fetchUser(email: string): Promise<USER> {
+export async function fetchUser(email: string): Promise<USER | undefined> {
 	const data: USER[] = []
 	await firestore
 		.collection('users')

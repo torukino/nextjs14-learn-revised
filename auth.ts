@@ -11,7 +11,7 @@ const BUG = true
 async function getUser(email: string): Promise<USER | undefined> {
 	try {
 		// const user = await sql<User>`SELECT * FROM users WHERE email=${email}`
-		const user: USER = await fetchUser(email)
+		const user: USER | undefined = await fetchUser(email)
 		BUG && console.log('user', JSON.stringify(user))
 		return user
 	} catch (error) {
