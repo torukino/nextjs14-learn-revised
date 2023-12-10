@@ -1,4 +1,4 @@
-import { DeleteBank, UpdateBank } from '@/app/ui/invoices/buttons'
+import { DeleteBank, DeleteBankButton, UpdateBank, UpdateBankButton } from '@/app/ui/invoices/buttons'
 import { BANK } from '@/types/bank'
 import { initBANK } from '@/types/bank'
 // Loading animation
@@ -142,8 +142,8 @@ export function BanksSkeleton() {
 									<td className="px-3 py-4 text-sm text-gray-200">{b.outH}</td>
 									<td className="px-3 py-4 text-sm text-gray-200">{b.resH}</td>
 									<div className="flex justify-end gap-3">
-										<UpdateBank bank={b} />
-										<DeleteBank bank={b} />
+										<UpdateBankButton bank={b} />
+										<DeleteBankButton id={b.id} />
 									</div>
 								</tr>
 							))}

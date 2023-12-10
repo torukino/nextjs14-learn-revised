@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { UpdateInvoice, DeleteInvoice, UpdateBank, DeleteBank } from '@/app/ui/invoices/buttons'
+import { UpdateBankButton, DeleteBankButton } from '@/app/ui/invoices/buttons'
 import InvoiceStatus from '@/app/ui/invoices/status'
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils'
 import { fetchFilteredBank } from '@/app/lib/data'
@@ -110,8 +110,8 @@ export default async function BankTable({ reminder, currentPage }: { reminder: s
 									<td className="px-3 py-4 text-sm text-gray-500">{b.outH}</td>
 									<td className="px-3 py-4 text-sm text-gray-500">{b.resH}</td>
 									<div className="flex justify-end gap-3">
-										<UpdateBank bank={b} />
-										<DeleteBank id={b.id} />
+										<UpdateBankButton bank={b} />
+										<DeleteBankButton id={b.id} />
 									</div>
 								</tr>
 							))}

@@ -1,22 +1,13 @@
-import { BANK, BANK_INPUT } from '@/types/bank'
+import { BANK, BANKINPUT } from '@/types/bank'
 import { REMINDER, initReminder } from '@/types/reminder'
 
 export const convertFormDataintoBank = (rawFormData: any): BANK => {
-	// const rawFormData = {
-	// 	date: formData.get('date'),
-	// 	selectedReminder: formData.get('selectedReminder'),
-	// 	account: formData.get('account'),
-	// 	inAmount: formData.get('inAmount'),
-	// 	outAmount: formData.get('outAmount'),
-	// 	status: formData.get('status'),
-	// };
-
 	const id = rawFormData.id || ''
 	const date = rawFormData.date || ''
 	const status = rawFormData.status || ''
 	const account = rawFormData.account || ''
-	const reminder = rawFormData.selectedReminder || ''
-	const reminderId = rawFormData.selectedReminderId || ''
+	const reminder = rawFormData.reminder || ''
+	const reminderId = rawFormData.reminderId || ''
 	const inAmountStr: string = rawFormData.inAmount ? Number(rawFormData.inAmount).toLocaleString() : ''
 	const outAmountStr: string = rawFormData.outAmount ? Number(rawFormData.outAmount).toLocaleString() : ''
 

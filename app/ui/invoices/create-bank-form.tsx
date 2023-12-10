@@ -3,11 +3,8 @@ import Link from 'next/link'
 import { CheckIcon, ClockIcon, CurrencyYenIcon, UserCircleIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/app/ui/button'
 import React from 'react'
-import { REMINDER, initReminder } from '@/types/reminder'
-import { useFormState } from 'react-dom'
-
+import { REMINDER } from '@/types/reminder'
 import { createBank } from '@/app/lib/actions'
-import Select from 'react-select'
 
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }

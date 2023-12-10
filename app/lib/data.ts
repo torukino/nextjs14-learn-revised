@@ -5,20 +5,26 @@ import { firestore } from '@/app/lib/firebaseConfig'
 import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { REMINDER } from '@/types/reminder'
+import { recalculationBank } from '@/tools/recalculationBank'
 
 const BUG = false
 
-
-export async function updateBank(bank: BANK): Promise<void> {
+export async function fetchBankById(id: string) {
+	try {
+		const date = await fetchAllBank()
+		const bank = date.filter(d => d.id === id)
+		return bank[0]
+	} catch (error) {
+		console.log('fetchBankById', error)
+	}
+}
+export async function updateBankDb(bank: BANK): Promise<void> {
 	noStore()
-	BUG && console.log('updateBank id:', bank.id, JSON.stringify(bank))
-	//もし、bank.idがなければ、firestoreからドキュメントを取得して、bank.idを取得する
-	console.log('updateBank id:', bank.id||"idない", JSON.stringify(bank))
 	if (!bank.id) {
 		//新たにfirestoreにドキュメントを追加して、bank.idを取得する
 		const id = firestore.collection('bank').doc().id
 		bank = { ...bank, id: id }
-		BUG && console.log('updateBank id:', bank.id, JSON.stringify(bank))
+		BUG && console.log('updateBank 新たに発行されたid:', bank.id)
 	}
 	try {
 		await firestore.collection('bank').doc(bank.id).set(bank)
@@ -56,6 +62,37 @@ export async function fetchAllBank(): Promise<any[]> {
 			console.log('Error getting documents', err)
 		})
 
+	//それぞれの残高でソート 同日付での順序づけをするために必要
+	data
+		.sort((a, b) => {
+			const resMA = parseInt(a.resM.replaceAll(',', ''))
+			const resMB = parseInt(b.resM.replaceAll(',', ''))
+			if (resMA < resMB) return -1
+			if (resMA > resMB) return 1
+			return 0
+		})
+		.sort((a, b) => {
+			const resIA = parseInt(a.resI.replaceAll(',', ''))
+			const resIB = parseInt(b.resI.replaceAll(',', ''))
+			if (resIA < resIB) return -1
+			if (resIA > resIB) return 1
+			return 0
+		})
+		.sort((a, b) => {
+			const resCA = parseInt(a.resC.replaceAll(',', ''))
+			const resCB = parseInt(b.resC.replaceAll(',', ''))
+			if (resCA < resCB) return -1
+			if (resCA > resCB) return 1
+			return 0
+		})
+		.sort((a, b) => {
+			const resHA = parseInt(a.resH?.replaceAll(',', ''))
+			const resHB = parseInt(b.resH?.replaceAll(',', ''))
+			if (resHA < resHB) return -1
+			if (resHA > resHB) return 1
+			return 0
+		})
+
 	// dateでソート
 	data.sort((a, b) => {
 		const dateA = new Date(a.date)
@@ -69,7 +106,9 @@ export async function fetchAllBank(): Promise<any[]> {
 	// 	console.log(`${i} => ${d.date}`)
 	// })
 
-	return data
+	const newAllBank = recalculationBank(data)
+
+	return newAllBank
 }
 
 const BANK_ITEMS_PER_PAGE = 6

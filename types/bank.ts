@@ -4,22 +4,22 @@
 export interface BANK {
 	id: string
 	date: string
-	account?: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
-	status?: 'auto' | 'hand' | 'undef'
+	account: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
+	status: string | undefined
 	reminder: string
 	reminderId: string
-	inM?: string
-	outM?: string
+	inM: string
+	outM: string
 	resM: string
-	inI?: string
-	outI?: string
+	inI: string
+	outI: string
 	resI: string
-	inC?: string
-	outC?: string
+	inC: string
+	outC: string
 	resC: string
-	inH?: string
+	inH: string
 	outH: string
-	resH?: string
+	resH: string
 	res: string
 }
 
@@ -45,18 +45,18 @@ export const initBANK: BANK = {
 	res: '',
 }
 
-export interface BANK_INPUT {
+export interface BANKINPUT {
 	id?: string // IDフィールド
 	date?: string | undefined // 日付フィールド
 	reminder?: string // 摘要フィールド
 	reminderId?: string
 	account?: 'みずほ銀行' | '群銀個人' | '群銀コロナ' | '群銀法人' | undefined
-	status?: 'auto' | 'hand' | 'undef'
+	status?: string
 	inAmount?: number // 入金額フィールド
 	outAmount?: number // 出金額フィールド
 }
 
 export type StateBank = {
-	errors?: BANK_INPUT
+	errors?: BANKINPUT
 	message?: string
 }

@@ -1,17 +1,18 @@
-import { deleteBank } from '@/app/lib/actions'
+import { deleteBank, updateBank } from '@/app/lib/actions'
 import { BANK } from '@/types/bank'
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
-export function UpdateBank({ bank }: { bank: BANK }) {
+export function UpdateBankButton({ bank }: { bank: BANK }) {
+	const id = bank.id
 	return (
-		<Link href="/dashboard/invoices" className="rounded-md border p-2 hover:bg-gray-100">
+		<Link href={`/dashboard/invoices/${id}/edit`} className="rounded-md border p-2 hover:bg-gray-100">
 			<PencilIcon className="w-5" />
 		</Link>
 	)
 }
 
-export function DeleteBank({ id }: { id: string }) {
+export function DeleteBankButton({ id }: { id: string }) {
 	const deleteInvoiceWithId = deleteBank.bind(null, id)
 	return (
 		<form action={deleteInvoiceWithId}>
