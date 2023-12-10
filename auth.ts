@@ -5,17 +5,14 @@ import { z } from 'zod'
 import { sql } from '@vercel/postgres'
 import type { User } from '@/app/lib/definitions'
 import bcrypt from 'bcrypt'
-const BUG = false
-async function getUser(email: string): Promise<User | undefined> {
+import { fetchUser } from '@/app/lib/data'
+import { USER } from '@/types/user'
+const BUG = true
+async function getUser(email: string): Promise<USER | undefined> {
 	try {
 		// const user = await sql<User>`SELECT * FROM users WHERE email=${email}`
-
-		const user = {
-			id: '123',
-			name: 'のぞみ',
-			email: 'nozomi.mem@gmail.com',
-			password: 'nozomi0131',
-		}
+		const user: USER = await fetchUser(email)
+		BUG && console.log('user', JSON.stringify(user))
 		return user
 	} catch (error) {
 		console.error('Failed to fetch user:', error)

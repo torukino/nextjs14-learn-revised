@@ -6,8 +6,33 @@ import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { REMINDER } from '@/types/reminder'
 import { recalculationBank } from '@/tools/recalculationBank'
+import { USER } from '@/types/user'
 
 const BUG = false
+
+export async function fetchUser(email: string): Promise<USER> {
+	const data: USER[] = []
+	await firestore
+		.collection('users')
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				// console.log(`${doc.id} => ${doc.data().date}`)
+				data.push(doc.data() as USER)
+			})
+		})
+		.catch(err => {
+			console.log('Error getting documents', err)
+		})
+	let user: USER | undefined = undefined
+	data.forEach(d => {
+		if (d.email === email) {
+			user = d
+		}
+	})
+
+	return user
+}
 
 export async function fetchBankById(id: string) {
 	try {
