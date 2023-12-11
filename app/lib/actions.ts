@@ -12,7 +12,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { signIn } from '@/auth'
 import { AuthError } from 'next-auth'
-
+import { z } from 'zod'
 const BUG = false
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
@@ -63,12 +63,59 @@ export async function updateBank(formData: FormData) {
 
 export async function deleteBank(id: string): Promise<void> {
 	BUG && console.log('deleteBank', id)
-	// await firestore.collection('bank').doc(id).delete()
+	await firestore.collection('bank').doc(id).delete()
 
 	revalidatePath('/dashboard/invoices')
 }
 
-export async function createBank(formData: FormData) {
+const FormSchema = z.object({
+	id: z.string(),
+	date: z.string({
+		invalid_type_error: '正しく入力してください',
+	}),
+	reminderId: z.string({
+		invalid_type_error: '正しく入力してください',
+	}),
+	reminder: z.string({
+		invalid_type_error: '正しく入力してください',
+	}),
+	account: z.string(),
+	inAmount: z.coerce.number().gt(0, { message: '0以上の数字を入力してください' }),
+	outAmount: z.coerce.number().gt(0, { message: '0以上の数字を入力してください' }),
+	status: z.string(),
+})
+const CreateBank = FormSchema.omit({ id: true, status: true })
+export interface State {
+	errors?: {
+		date?: string
+		reminderId?: string
+		reminder?: string
+		account?: string
+		inAmount?: string
+		outAmount?: string
+	}
+	messages?: string | null
+}
+
+export async function createBank(prevstate: State, formData: FormData) {
+	const validatedFields = CreateBank.safeParse({
+		id: formData.get('id'),
+		date: formData.get('date'),
+		reminderId: formData.get('reminder'),
+		reminder: formData.get('reminder'),
+		account: formData.get('account'),
+		inAmount: Number(formData.get('inAmount')),
+		outAmount: Number(formData.get('outAmount')),
+		status: formData.get('status'),
+	})
+
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			messages: 'Missing Fileds. Failed to Create Bank',
+		}
+	}
+
 	BUG && console.log(`reminder,${formData.get('reminder')}`)
 	const reminderId_: any = formData.get('reminder') || ''
 	const reminderId = reminderId_.toString()

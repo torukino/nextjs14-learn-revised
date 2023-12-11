@@ -5,9 +5,14 @@ import { Button } from '@/app/ui/button'
 import React from 'react'
 import { REMINDER } from '@/types/reminder'
 import { createBank } from '@/app/lib/actions'
+import { useFormState } from 'react-dom'
 
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }
+	const [state, dispatch] = useFormState(createBank, initialState);
+
+
+
 	// リマインダーの状態を保存するためのReactの状態を作成します
 	// const [selectedReminder, setSelectedReminder] = React.useState<string>()
 	// const [selectedReminderId, setSelectedReminderId] = React.useState<string>()
@@ -30,7 +35,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	}))
 	// console.log('reminders', optionsReminder)
 	return (
-		<form action={createBank}>
+		<form action={dispatch}>
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 日付 */}
 				<div className="mb-4">
