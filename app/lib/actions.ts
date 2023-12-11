@@ -63,7 +63,7 @@ export async function updateBank(formData: FormData) {
 
 export async function deleteBank(id: string): Promise<void> {
 	BUG && console.log('deleteBank', id)
-	// await firestore.collection('bank').doc(id).delete()
+	await firestore.collection('bank').doc(id).delete()
 
 	revalidatePath('/dashboard/invoices')
 }
