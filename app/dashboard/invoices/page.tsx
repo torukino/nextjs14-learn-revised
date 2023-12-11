@@ -22,7 +22,6 @@ export default async function Page({
 	const currentPage = Number(searchParams?.page) || 1
 	const totalPages = await fetchBankPages(reminder)
 
-	// console.log("reminders",reminders.length)
 	if (remindersInit) {
 		const reminders: REMINDER[] = await fetchReminders()
 		if (reminders.length === 0) {
