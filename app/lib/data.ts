@@ -17,7 +17,6 @@ export async function fetchUser(email: string): Promise<USER | undefined> {
 		.get()
 		.then(querySnapshot => {
 			querySnapshot.forEach(doc => {
-				// console.log(`${doc.id} => ${doc.data().date}`)
 				data.push(doc.data() as USER)
 			})
 		})
