@@ -13,7 +13,7 @@ import { redirect } from 'next/navigation'
 import { signIn } from '@/auth'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
-const BUG = false
+const BUG = true
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
 	try {
@@ -71,66 +71,85 @@ export async function deleteBank(id: string): Promise<void> {
 const FormSchema = z.object({
 	id: z.string(),
 	date: z.string({
-		invalid_type_error: '正しく入力してください',
+		invalid_type_error: '日付を正しく入力してください',
 	}),
 	reminderId: z.string({
-		invalid_type_error: '正しく入力してください',
+		invalid_type_error: '摘要を正しく入力してください',
 	}),
 	reminder: z.string({
-		invalid_type_error: '正しく入力してください',
+		invalid_type_error: '摘要を正しく入力してください',
 	}),
 	account: z.string(),
-	inAmount: z.coerce.number().gt(0, { message: '0以上の数字を入力してください' }),
-	outAmount: z.coerce.number().gt(0, { message: '0以上の数字を入力してください' }),
+	inAmount: z.union([
+		z
+			.string()
+			.refine(value => value === '' || value === undefined, { message: '空文字列またはundefinedである必要があります' })
+			.transform(() => 0),
+		z.number().int().gte(0, { message: '正の整数を入力してください' }),
+	]),
+	outAmount: z.union([
+		z
+			.string()
+			.refine(value => value === '' || value === undefined, { message: '空文字列またはundefinedである必要があります' })
+			.transform(() => 0),
+		z.number().int().gte(0, { message: '正の整数を入力してください' }),
+	]),
 	status: z.string(),
 })
-const CreateBank = FormSchema.omit({ id: true, status: true })
+const CreateBank = FormSchema.omit({ id: true })
 export interface State {
-	errors?: {
-		date?: string
-		reminderId?: string
-		reminder?: string
-		account?: string
-		inAmount?: string
-		outAmount?: string
+	errors: {
+		date?: string[]
+		reminderId?: string[]
+		reminder?: string[]
+		account?: string[]
+		inAmount?: string[]
+		outAmount?: string[]
+		status?: string[]
 	}
-	messages?: string | null
+	message?: string | null
 }
 
-export async function createBank(prevstate: State, formData: FormData) {
+export async function createBank(prevState: State, formData: FormData) {
 	const validatedFields = CreateBank.safeParse({
-		id: formData.get('id'),
 		date: formData.get('date'),
-		reminderId: formData.get('reminder'),
-		reminder: formData.get('reminder'),
+		reminderId: formData.get('reminderId'),
+		reminder: formData.get('reminderId'),
 		account: formData.get('account'),
 		inAmount: Number(formData.get('inAmount')),
 		outAmount: Number(formData.get('outAmount')),
 		status: formData.get('status'),
 	})
 
+	// 例
+	// validatedFields {"success":true,"data":{"date":"2023-12-12","reminderId":"KWpDZy9Ms73tY6CuiqF0","reminder":"KWpDZy9Ms73tY6CuiqF0","account":"群銀個人","inAmount":1000,"outAmount":10,"status":"undef"}}
+	// あるいは
+	// validatedFields {"success":false,"error":{"issues":[{"code":"too_small","minimum":0,"type":"number","inclusive":false,"exact":false,"message":"0以上の数字を入力してください","path":["outAmount"]}],"name":"ZodError"}}
+	// など
+	BUG && console.log('validatedFields', JSON.stringify(validatedFields))
 	if (!validatedFields.success) {
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			messages: 'Missing Fileds. Failed to Create Bank',
 		}
 	}
+	BUG && console.log('validatedFields.data', JSON.stringify(validatedFields.data))
+	// validatedFields.data {"date":"2023-12-19","reminderId":"9gSENJ0WAodVHvVxHBXg",
+	// "reminder":"9gSENJ0WAodVHvVxHBXg","account":"みずほ銀行","inAmount":200,"outAmount":0,
+	// "status":"hand"}
 
-	BUG && console.log(`reminder,${formData.get('reminder')}`)
-	const reminderId_: any = formData.get('reminder') || ''
-	const reminderId = reminderId_.toString()
-	BUG && console.log(`reminderId,${reminderId}`)
+	const reminder = await fetchReminderById(validatedFields.data.reminderId)
+	const rawFormData = { ...validatedFields.data, reminder: reminder }
 
-	const reminder = await fetchReminderById(reminderId)
-	const rawFormData = {
-		date: formData.get('date'),
-		reminderId: formData.get('reminder'),
-		reminder: reminder,
-		account: formData.get('account'),
-		inAmount: Number(formData.get('inAmount')),
-		outAmount: Number(formData.get('outAmount')),
-		status: formData.get('status'),
-	}
+	// const rawFormData = {
+	// 	date: formData.get('date'),
+	// 	reminderId: formData.get('reminder'),
+	// 	reminder: reminder,
+	// 	account: formData.get('account'),
+	// 	inAmount: Number(formData.get('inAmount')),
+	// 	outAmount: Number(formData.get('outAmount')),
+	// 	status: formData.get('status'),
+	// }
 
 	const newBank = convertFormDataintoBank(rawFormData)
 

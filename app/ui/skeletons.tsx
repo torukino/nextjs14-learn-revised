@@ -141,10 +141,13 @@ export function BanksSkeleton() {
 									<td className="px-3 py-4 text-sm text-gray-200">{b.inH}</td>
 									<td className="px-3 py-4 text-sm text-gray-200">{b.outH}</td>
 									<td className="px-3 py-4 text-sm text-gray-200">{b.resH}</td>
-									<div className="flex justify-end gap-3">
-										<UpdateBankButton bank={b} />
-										<DeleteBankButton id={b.id} />
-									</div>
+									<td className="px-3 py-4 text-sm text-gray-200">{b.resH}</td>
+									<td className="px-3 py-4 text-sm text-gray-200">
+										<div className="flex justify-end gap-3">
+											<UpdateBankButton bank={b} />
+											<DeleteBankButton id={b.id} />
+										</div>
+									</td>
 								</tr>
 							))}
 						</tbody>
