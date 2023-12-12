@@ -6,8 +6,9 @@ import React from 'react'
 import { REMINDER } from '@/types/reminder'
 import { createBank } from '@/app/lib/actions'
 import { useFormState } from 'react-dom'
-import Select, { CSSObjectWithLabel } from 'react-select'
-
+import CreatableSelect from 'react-select/creatable'
+import CSSObject from 'react-select'
+import { CSSProperties } from 'react'
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }
 	const [state, dispatch] = useFormState(createBank, initialState)
@@ -61,15 +62,25 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 						摘要を選んでください
 					</label>
 					<div className="relative">
-						<Select
+						<CreatableSelect
 							options={optionsReminder}
 							onChange={handleReminderChange}
 							required
-							// styles={{
-							// 	singleValue: (provided: CSSObjectWithLabel) => ({ ...provided, paddingLeft: '30px' }),
-							// 	placeholder: (provided: CSSObjectWithLabel) => ({ ...provided, paddingLeft: '30px' }),
-							// 	input: (provided: CSSObjectWithLabel) => ({ ...provided, paddingLeft: '30px' }),
-							// }}
+							placeholder="摘要を選んでください"
+							styles={{
+								singleValue: provided => ({
+									...(provided as CSSProperties),
+									paddingLeft: '30px',
+								}),
+								placeholder: provided => ({
+									...(provided as CSSProperties),
+									paddingLeft: '30px',
+								}),
+								input: provided => ({
+									...(provided as CSSProperties),
+									paddingLeft: '30px',
+								}),
+							}}
 						/>
 
 						<UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
