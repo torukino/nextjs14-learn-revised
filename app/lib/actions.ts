@@ -113,8 +113,8 @@ export interface State {
 export async function createBank(prevState: State, formData: FormData) {
 	const validatedFields = CreateBank.safeParse({
 		date: formData.get('date'),
-		reminderId: formData.get('reminderId'),
-		reminder: formData.get('reminderId'),
+		reminderId: formData.get('selectedReminderId'),
+		reminder: formData.get('selectedReminder'),
 		account: formData.get('account'),
 		inAmount: Number(formData.get('inAmount')),
 		outAmount: Number(formData.get('outAmount')),

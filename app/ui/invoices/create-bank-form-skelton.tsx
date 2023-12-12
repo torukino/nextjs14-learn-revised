@@ -6,26 +6,29 @@ import React from 'react'
 import { REMINDER } from '@/types/reminder'
 import { createBank } from '@/app/lib/actions'
 import { useFormState } from 'react-dom'
-import Select, { CSSObjectWithLabel } from 'react-select'
 
-export default function Form({ reminders }: { reminders: REMINDER[] }) {
+export default function FormSkelton() {
 	const initialState = { message: null, errors: {} }
-	const [state, dispatch] = useFormState(createBank, initialState)
+	const [state, dispatch] = useFormState(createBank, initialState);
+
+
 
 	// リマインダーの状態を保存するためのReactの状態を作成します
-	const [selectedReminder, setSelectedReminder] = React.useState<string>()
-	const [selectedReminderId, setSelectedReminderId] = React.useState<string>()
+	// const [selectedReminder, setSelectedReminder] = React.useState<string>()
+	// const [selectedReminderId, setSelectedReminderId] = React.useState<string>()
 
 	// // 選択されたリマインダーを状態として保存するonChangeハンドラを作成します
-	function handleReminderChange(selectedOption: { label: string; value: string } | null) {
-		selectedOption && console.log(`selectedOption, label:${selectedOption.label}, value:${selectedOption.value}`)
+	// function handleReminderChange(selectedOption: { label: string; value: string } | null) {
+	// 	selectedOption && console.log(`selectedOption, ${selectedOption.label}, ${selectedOption.value}`)
 
-		if (selectedOption) {
-			setSelectedReminder(selectedOption.label)
-			setSelectedReminderId(selectedOption.value)
-		}
-	}
+	// 	if (selectedOption) {
+	// 		setSelectedReminder(selectedOption.label)
+	// 		setSelectedReminderId(selectedOption.value)
+	// 	}
+	// }
+	//   const [state, dispatch] = useFormState(createBank, initialState);
 
+	const reminders: REMINDER[] = [{reminder: 'test', id: '1'}]
 	// リマインダーの配列をラベルと値のペアに変換
 	const optionsReminder = reminders.map((r: REMINDER) => ({
 		label: r.reminder,
@@ -54,7 +57,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 				</div>
 
 				{/* 摘要を選ぶ */}
-				<div className="mb-4">
+				{/* <div className="mb-4">
 					<input type="hidden" name="selectedReminder" value={selectedReminder || ''} />
 					<input type="hidden" name="selectedReminderId" value={selectedReminderId || ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
@@ -65,18 +68,17 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							options={optionsReminder}
 							onChange={handleReminderChange}
 							required
-							// styles={{
-							// 	singleValue: (provided: CSSObjectWithLabel) => ({ ...provided, paddingLeft: '30px' }),
-							// 	placeholder: (provided: CSSObjectWithLabel) => ({ ...provided, paddingLeft: '30px' }),
-							// 	input: (provided: CSSObjectWithLabel) => ({ ...provided, paddingLeft: '30px' }),
-							// }}
+							styles={{
+								singleValue: provided => ({ ...provided, paddingLeft: '30px' }),
+								placeholder: provided => ({ ...provided, paddingLeft: '30px' }),
+								input: provided => ({ ...provided, paddingLeft: '30px' }),
+							}}
 						/>
 
 						<UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
 					</div>
-				</div>
+				</div> */}
 
-				{/* 摘要を選ぶ
 				<div className="mb-4">
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
@@ -96,7 +98,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 						</select>
 						<UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
 					</div>
-				</div> */}
+				</div>
 
 				{/* 分類 */}
 				<fieldset>
