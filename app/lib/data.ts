@@ -10,6 +10,18 @@ import { USER } from '@/types/user'
 
 const BUG = false
 
+export async function updateReminderDb(reminderId:string, reminder:string): Promise<void> {
+	noStore()
+	try {
+		await firestore.collection('reminder').doc(reminderId).set({reminder: reminder})
+	} catch (error) {
+		BUG && console.log('Error reminder collection', error)
+		throw new Error('Failed to update reminder.')
+	}
+}
+
+
+
 export async function fetchUser(email: string): Promise<USER | undefined> {
 	const data: USER[] = []
 	await firestore

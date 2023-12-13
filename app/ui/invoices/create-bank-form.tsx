@@ -7,7 +7,6 @@ import { REMINDER } from '@/types/reminder'
 import { createBank } from '@/app/lib/actions'
 import { useFormState } from 'react-dom'
 import CreatableSelect from 'react-select/creatable'
-import CSSObject from 'react-select'
 import { CSSProperties } from 'react'
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }

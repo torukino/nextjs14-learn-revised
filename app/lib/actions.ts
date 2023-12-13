@@ -4,8 +4,8 @@
 // 	// console.log('formData', formData.get('name'))
 // 	await firestore.collection('sample').add({ name: formData.get('name') })
 // }
-
-import { fetchReminderById, updateBankDb } from '@/app/lib/data'
+import { v4 as uuidv4 } from 'uuid'
+import { fetchReminderById, updateBankDb, updateReminderDb } from '@/app/lib/data'
 import { convertFormDataintoBank } from '@/tools/convData'
 import { firestore } from '@/app/lib/firebaseConfig'
 import { revalidatePath } from 'next/cache'
@@ -137,8 +137,13 @@ export async function createBank(prevState: State, formData: FormData) {
 	// validatedFields.data {"date":"2023-12-19","reminderId":"9gSENJ0WAodVHvVxHBXg",
 	// "reminder":"9gSENJ0WAodVHvVxHBXg","account":"みずほ銀行","inAmount":200,"outAmount":0,
 	// "status":"hand"}
-
-	const reminder = await fetchReminderById(validatedFields.data.reminderId)
+	const reminderId = validatedFields.data.reminderId
+	let reminder = await fetchReminderById(reminderId)
+	if (!reminder) {
+		const id = uuidv4()
+		reminder = reminderId
+		updateReminderDb(id,reminder)
+	}
 	const rawFormData = { ...validatedFields.data, reminder: reminder }
 
 	// const rawFormData = {

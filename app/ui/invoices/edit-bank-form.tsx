@@ -3,13 +3,31 @@ import Link from 'next/link'
 import { CheckIcon, ClockIcon, CurrencyYenIcon, UserCircleIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/app/ui/button'
 import React from 'react'
-import { fetchBankById, fetchReminders } from '@/app/lib/data'
+import { ActionMeta, SingleValue } from 'react-select'
 import { BANK } from '@/types/bank'
 import { REMINDER } from '@/types/reminder'
-import { updateBank } from '@/app/lib/actions'
+import { createBank, updateBank } from '@/app/lib/actions'
 import { convertBankToBankinput } from '@/tools/convertBankToBankinput'
+import CreatableSelect from 'react-select/creatable'
+import { CSSProperties } from 'react'
+import { useFormState } from 'react-dom'
 
 export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REMINDER[] }) {
+	const initialState = { message: null, errors: {} }
+	const [state, dispatch] = useFormState(createBank, initialState)
+
+	// リマインダーの状態を保存するためのReactの状態を作成します
+	const [selectedReminder, setSelectedReminder] = React.useState<string>()
+	const [selectedReminderId, setSelectedReminderId] = React.useState<string>()
+
+	// // 選択されたリマインダーを状態として保存するonChangeハンドラを作成します
+	function handleReminderChange(selectedOption: SingleValue<{ label: string; value: string }>, actionMeta: ActionMeta<{ label: string; value: string }>) {
+		if (selectedOption) {
+			setSelectedReminder(selectedOption.label || '')
+			setSelectedReminderId(selectedOption.value || '')
+		}
+	}
+
 	const bank__ = convertBankToBankinput(bank_)
 	const [bank, setBank] = React.useState(bank__)
 	const optionsReminder = reminders.map((r: REMINDER) => ({
@@ -17,7 +35,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 		value: r.id,
 	}))
 	return (
-		<form action={updateBank}>
+		<form action={dispatch}>
 			<input type="hidden" name="id" defaultValue={bank.id} />
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 日付 */}
@@ -40,26 +58,36 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 					</div>
 				</div>
 
-				{/* 摘要 */}
+				{/* 摘要を選ぶ */}
 				<div className="mb-4">
+					<input type="hidden" name="selectedReminder" value={selectedReminder || ''} />
+					<input type="hidden" name="selectedReminderId" value={selectedReminderId || ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
 					</label>
 					<div className="relative">
-						<select
-							id="reminderId"
-							name="reminder"
-							value={bank.reminderId} // 初期値を設定
-							onChange={e => setBank({ ...bank, reminderId: e.target.value })}
-							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-						>
-							<option value="">選択してください</option>
-							{optionsReminder.map((option, index) => (
-								<option key={index} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
+						<CreatableSelect
+							options={optionsReminder}
+							onChange={handleReminderChange}
+							required
+							placeholder="摘要を選んでください"
+							defaultValue={{ label: bank.reminder||"", value: bank.reminderId||"" }}
+							styles={{
+								singleValue: provided => ({
+									...(provided as CSSProperties),
+									paddingLeft: '30px',
+								}),
+								placeholder: provided => ({
+									...(provided as CSSProperties),
+									paddingLeft: '30px',
+								}),
+								input: provided => ({
+									...(provided as CSSProperties),
+									paddingLeft: '30px',
+								}),
+							}}
+						/>
+
 						<UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
 					</div>
 				</div>
