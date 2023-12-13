@@ -1,3 +1,9 @@
+import ReminderTable from "@/app/ui/customers/reminder-table";
+
 export default function Page() {
-	return <p>顧客</p>
+	return (
+	<main>
+		<ReminderTable/>
+	</main>
+	)
 }

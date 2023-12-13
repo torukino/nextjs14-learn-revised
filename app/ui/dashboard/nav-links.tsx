@@ -14,7 +14,7 @@ const links = [
 		href: '/dashboard/invoices',
 		icon: DocumentDuplicateIcon,
 	},
-	{ name: '取引先', href: '/dashboard/customers', icon: UserGroupIcon },
+	{ name: '摘要リスト', href: '/dashboard/customers', icon: UserGroupIcon },
 	{ name: 'tailwind練習', href: '/dashboard/tailwind', icon: BookOpenIcon },
 ]
 
