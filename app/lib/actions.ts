@@ -5,7 +5,7 @@
 // 	await firestore.collection('sample').add({ name: formData.get('name') })
 // }
 import { v4 as uuidv4 } from 'uuid'
-import { fetchReminderById, updateBankDb, updateReminderDb } from '@/app/lib/data'
+import { fetchReminderById, updateBankDb, updateReminderDB } from '@/app/lib/data'
 import { convertFormDataintoBank } from '@/tools/convData'
 import { firestore } from '@/app/lib/firebaseConfig'
 import { revalidatePath } from 'next/cache'
@@ -13,6 +13,7 @@ import { redirect } from 'next/navigation'
 import { signIn } from '@/auth'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
+import { REMINDER } from '@/types/reminder'
 const BUG = true
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
@@ -29,6 +30,97 @@ export async function authenticate(prevState: string | undefined, formData: Form
 		}
 		throw error
 	}
+}
+
+export async function updateReminder(formData: FormData) {
+	const data = {
+		id: formData.get('id'),
+		reminder: formData.get('reminder'),
+		account: formData.get('account'),
+		inAmountStr: formData.get('inAmountStr'),
+		outAmountStr: formData.get('outAmountStr'),
+		status: formData.get('status'),
+	}
+
+	await updateReminderDB(data as REMINDER)
+
+	revalidatePath('/dashboard/customers')
+	redirect('/dashboard/customers')
+}
+
+export async function deleteReminder(id: string): Promise<void> {
+	BUG && console.log('deleteReminder', id)
+	await firestore.collection('reminder').doc(id).delete()
+
+	revalidatePath('/dashboard/customers')
+}
+
+const FormSchemaReminder = z.object({
+	id: z.string(),
+	reminder: z.string({
+		invalid_type_error: '摘要を正しく入力してください',
+	}),
+	account: z.string(),
+	inAmountStr: z.string(),
+	outAmountStr: z.string(),
+	status: z.string(),
+})
+const CreateReminder = FormSchemaReminder.omit({ id: true })
+export interface StateReminder {
+	errors: {
+		reminder?: string[]
+		account?: string[]
+		inAmountStr?: string[]
+		outAmountStr?: string[]
+		status?: string[]
+	}
+	message?: string | null
+}
+
+export async function createReminder(prevState: StateReminder, formData: FormData) {
+	const validatedFields = CreateReminder.safeParse({
+		reminder: formData.get('selectedReminder'),
+		account: formData.get('account'),
+		inAmount: Number(formData.get('inAmount')),
+		outAmount: Number(formData.get('outAmount')),
+		status: formData.get('status'),
+	})
+
+	// 例
+	// validatedFields {"success":true,"data":{"date":"2023-12-12","reminderId":"KWpDZy9Ms73tY6CuiqF0","reminder":"KWpDZy9Ms73tY6CuiqF0","account":"群銀個人","inAmount":1000,"outAmount":10,"status":"undef"}}
+	// あるいは
+	// validatedFields {"success":false,"error":{"issues":[{"code":"too_small","minimum":0,"type":"number","inclusive":false,"exact":false,"message":"0以上の数字を入力してください","path":["outAmount"]}],"name":"ZodError"}}
+	// など
+	BUG && console.log('validatedFields', JSON.stringify(validatedFields))
+	if (!validatedFields.success) {
+		return {
+			errors: validatedFields.error.flatten().fieldErrors,
+			messages: 'Missing Fileds. Failed to Create Reminder',
+		}
+	}
+	BUG && console.log('validatedFields.data', JSON.stringify(validatedFields.data))
+
+	const reminderFormData = { ...validatedFields.data }
+
+	// const rawFormData = {
+	// 	date: formData.get('date'),
+	// 	reminderId: formData.get('reminder'),
+	// 	reminder: reminder,
+	// 	account: formData.get('account'),
+	// 	inAmount: Number(formData.get('inAmount')),
+	// 	outAmount: Number(formData.get('outAmount')),
+	// 	status: formData.get('status'),
+	// }
+
+	await updateReminderDB(reminderFormData as REMINDER)
+
+	// // const n1 = newAllBank[newAllBank.length - 1]
+	// // const n2 = newAllBank[newAllBank.length - 2]
+	// // console.log(`${n2.date} 入金: ${n2.inM} 出金: ${n2.outM} 残高: ${n2.resM}`)
+	// // console.log(`${n1.date} 入金: ${n1.inM} 出金: ${n1.outM} 残高: ${n1.resM}`)
+
+	revalidatePath('/dashboard/invoices')
+	redirect('/dashboard/invoices')
 }
 
 export async function updateBank(formData: FormData) {
@@ -141,8 +233,16 @@ export async function createBank(prevState: State, formData: FormData) {
 	let reminder = await fetchReminderById(reminderId)
 	if (!reminder) {
 		const id = uuidv4()
-		reminder = reminderId
-		updateReminderDb(id,reminder)
+		const newReminder: REMINDER = {
+			id: id,
+			reminder: validatedFields.data.reminder,
+			account: validatedFields.data.account,
+			inAmountStr: validatedFields.data.inAmount.toString(),
+			outAmountStr: validatedFields.data.outAmount.toString(),
+			status: validatedFields.data.status,
+		}
+
+		updateReminderDB(newReminder)
 	}
 	const rawFormData = { ...validatedFields.data, reminder: reminder }
 

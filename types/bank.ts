@@ -60,3 +60,8 @@ export type StateBank = {
 	errors?: BANKINPUT
 	message?: string
 }
+
+export interface BANKPLUS extends BANK {
+	inAmountStr: string
+	outAmountStr: string
+}
