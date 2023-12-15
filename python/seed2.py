@@ -50,7 +50,7 @@ for doc in docs:
         "reminder": doc.to_dict()['reminder'],
         "status": doc.to_dict()['status'],
         "account": account,
-        "isAmountStr": isAmountStr,
+        "inAmountStr": isAmountStr,
         "outAmountStr":outAmountStr,
     }
     doc_ref.set(data)

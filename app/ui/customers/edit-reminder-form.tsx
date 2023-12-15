@@ -4,10 +4,8 @@ import { CheckIcon, ClockIcon, CurrencyYenIcon, UserCircleIcon, FaceSmileIcon } 
 import { Button } from '@/app/ui/button'
 import React from 'react'
 import { ActionMeta, SingleValue } from 'react-select'
-import { BANK } from '@/types/bank'
 import { REMINDER } from '@/types/reminder'
-import { createBank, createReminder, updateBank } from '@/app/lib/actions'
-import { convertBankToBankinput } from '@/tools/convertBankToBankinput'
+import { createReminder } from '@/app/lib/actions'
 import CreatableSelect from 'react-select/creatable'
 import { CSSProperties } from 'react'
 import { useFormState } from 'react-dom'
@@ -33,9 +31,11 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 		label: r.reminder,
 		value: r.id,
 	}))
+
+	console.log('reminder:', JSON.stringify(reminder))
 	return (
 		<form action={dispatch}>
-			<input type="hidden" name="id" defaultValue={reminder.id} />
+			<input type="hidden" name="id" defaultValue={reminder?.id || ''} />
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 摘要を選ぶ */}
 				<div className="mb-4">
@@ -50,7 +50,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 							onChange={handleReminderChange}
 							required
 							placeholder="摘要を選んでください"
-							defaultValue={{ label: reminder.reminder || '', value: reminder.id || '' }}
+							defaultValue={{ label: reminder?.reminder || '', value: reminder?.id || '' }}
 							styles={{
 								singleValue: provided => ({
 									...(provided as CSSProperties),
@@ -82,7 +82,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 									name="status"
 									type="radio"
 									value="auto"
-									checked={reminder.status === 'auto'}
+									checked={reminder?.status === 'auto'}
 									onChange={e => setReminder({ ...reminder, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>

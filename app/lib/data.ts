@@ -4,11 +4,11 @@ import { formatCurrency } from './utils'
 import { firestore } from '@/app/lib/firebaseConfig'
 import { BANK } from '@/types/bank'
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
-import { REMINDER } from '@/types/reminder'
+import { REMINDER, initReminder } from '@/types/reminder'
 import { recalculationBank } from '@/tools/recalculationBank'
 import { USER } from '@/types/user'
 
-const BUG = false
+const BUG = true
 
 export async function updateReminderDB(reminder: REMINDER): Promise<void> {
 	noStore()
@@ -20,10 +20,29 @@ export async function updateReminderDB(reminder: REMINDER): Promise<void> {
 	}
 }
 
+export async function fetchReminderByReminderId(id: string): Promise<REMINDER> {
+	const data: REMINDER[] = []
+	await firestore
+		.collection('reminder')
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				data.push(doc.data() as REMINDER)
+			})
+		})
+		.catch(err => {
+			console.log('Error getting all reminders', err)
+		})
+
+	let reminder: REMINDER | undefined = data.find(d => d.id === id)
+	if (!reminder) throw new Error('Failed to fetch reminder.')
+	return reminder
+}
+
 export async function fetchAllReminders(): Promise<REMINDER[]> {
 	const data: REMINDER[] = []
 	await firestore
-		.collection('reminders')
+		.collection('reminder')
 		.get()
 		.then(querySnapshot => {
 			querySnapshot.forEach(doc => {
@@ -64,6 +83,7 @@ export async function fetchBankById(id: string) {
 	try {
 		const date = await fetchAllBank()
 		const bank = date.filter(d => d.id === id)
+		BUG && console.log('fetchBankById', JSON.stringify(bank[0]))
 		return bank[0]
 	} catch (error) {
 		console.log('fetchBankById', error)
@@ -85,15 +105,14 @@ export async function updateBankDb(bank: BANK): Promise<void> {
 	}
 }
 
-export async function fetchReminderById(id: string): Promise<string | null> {
+export async function fetchReminderById(id: string): Promise<REMINDER> {
 	noStore()
 	try {
 		const reminder = await firestore.collection('reminder').doc(id).get()
-		return reminder.data()?.reminder
+		return reminder.data()?.reminder || initReminder
 	} catch (error) {
 		BUG && console.log('Error reminder collection', error)
 		throw new Error('Failed to fetch reminder.')
-		return null
 	}
 }
 

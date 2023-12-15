@@ -3,15 +3,13 @@ import Link from 'next/link'
 import { CheckIcon, ClockIcon, CurrencyYenIcon, UserCircleIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/app/ui/button'
 import React from 'react'
-import { REMINDER } from '@/types/reminder'
+import { REMINDER, initReminder } from '@/types/reminder'
 import { createBank } from '@/app/lib/actions'
 import { useFormState } from 'react-dom'
 
 export default function FormSkelton() {
 	const initialState = { message: null, errors: {} }
-	const [state, dispatch] = useFormState(createBank, initialState);
-
-
+	const [state, dispatch] = useFormState(createBank, initialState)
 
 	// リマインダーの状態を保存するためのReactの状態を作成します
 	// const [selectedReminder, setSelectedReminder] = React.useState<string>()
@@ -28,7 +26,7 @@ export default function FormSkelton() {
 	// }
 	//   const [state, dispatch] = useFormState(createBank, initialState);
 
-	const reminders: REMINDER[] = [{reminder: 'test', id: '1'}]
+	const reminders: REMINDER[] = [{ ...initReminder, reminder: 'test', id: '1' }]
 	// リマインダーの配列をラベルと値のペアに変換
 	const optionsReminder = reminders.map((r: REMINDER) => ({
 		label: r.reminder,
