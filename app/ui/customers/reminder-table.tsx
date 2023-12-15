@@ -2,12 +2,18 @@ import { fetchAllBank, fetchAllReminders } from '@/app/lib/data'
 import { BANK, BANKPLUS } from '@/types/bank'
 import { BanknotesIcon, ClockIcon, UserGroupIcon, InboxIcon } from '@heroicons/react/24/outline'
 import { lusitana } from '@/app/ui/fonts'
-import { Card } from '@/app/ui/customers/bank-cards'
+
 import { REMINDER } from '@/types/reminder'
+import { Card } from '@/app/ui/customers/reminder-cards'
 const BUG = true
+
 export default async function ReminderTable() {
 	const reminders: REMINDER[] = await fetchAllReminders()
-	console.log('reminders length:', reminders.length)
+	BUG &&
+		reminders.forEach(r => {
+			if (typeof r.reminder !== 'string') console.log(`reminder:${JSON.stringify(r.reminder)} typeof reminder (in reminder-table): ${typeof r.reminder}`)
+		})
+	BUG && console.log('reminders length:', reminders.length)
 
 	return (
 		<div className="mt-6 flow-root">

@@ -6,14 +6,12 @@ import React from 'react'
 import { useFormState } from 'react-dom'
 import { createReminder } from '@/app/lib/actions'
 
-export default function Form() {
-	const initialState = { message: null, errors: {} }
-	const [state, dispatch] = useFormState(createReminder, initialState)
-
+export default function FormSkelton() {
 	return (
-		<form action={dispatch}>
+		<div>
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 摘要を選ぶ */}
+
 				<div className="mb-4">
 					<label htmlFor="outAmount" className="mb-2 block text-sm font-medium">
 						摘要
@@ -21,6 +19,7 @@ export default function Form() {
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
 							<input
+								disabled
 								id="reminder"
 								name="reminder"
 								type="text"
@@ -40,6 +39,7 @@ export default function Form() {
 						<div className="flex gap-4">
 							<div className="flex items-center">
 								<input
+									disabled
 									id="auto"
 									name="status"
 									type="radio"
@@ -70,6 +70,7 @@ export default function Form() {
 							</div>
 							<div className="flex items-center">
 								<input
+									disabled
 									id="undef"
 									name="status"
 									type="radio"
@@ -113,14 +114,15 @@ export default function Form() {
 
 				{/* Invoice Amount */}
 				<div className="mb-4">
-					<label htmlFor="inAmountStr" className="mb-2 block text-sm font-medium">
+					<label htmlFor="inAmount" className="mb-2 block text-sm font-medium">
 						入金額
 					</label>
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
 							<input
-								id="inAmountStr"
-								name="inAmountStr"
+								disabled
+								id="inAmount"
+								name="inAmount"
 								type="number"
 								step="1"
 								placeholder="入金額を入力"
@@ -133,14 +135,15 @@ export default function Form() {
 
 				{/*  Amount */}
 				<div className="mb-4">
-					<label htmlFor="outAmountStr" className="mb-2 block text-sm font-medium">
+					<label htmlFor="outAmount" className="mb-2 block text-sm font-medium">
 						出勤額
 					</label>
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
 							<input
-								id="outAmountStr"
-								name="outAmountStr"
+								disabled
+								id="outAmount"
+								name="outAmount"
 								type="number"
 								step="1"
 								placeholder="出金額を入力"
@@ -151,16 +154,15 @@ export default function Form() {
 					</div>
 				</div>
 			</div>
-
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
-					href="/dashboard/customers"
+					href="/dashboard/invoices"
 					className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
 				>
 					取消
 				</Link>
 				<Button type="submit">更新</Button>
 			</div>
-		</form>
+		</div>
 	)
 }

@@ -19,9 +19,7 @@ export default async function Page() {
 					},
 				]}
 			/>
-			<Suspense fallback=<FormSkelton />>
-				<Form reminders={reminders} />
-			</Suspense>
+			<Form reminders={reminders} />
 		</main>
 	)
 }

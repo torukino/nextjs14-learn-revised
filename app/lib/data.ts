@@ -8,12 +8,12 @@ import { REMINDER, initReminder } from '@/types/reminder'
 import { recalculationBank } from '@/tools/recalculationBank'
 import { USER } from '@/types/user'
 
-const BUG = true
+const BUG = false
 
 export async function updateReminderDB(reminder: REMINDER): Promise<void> {
 	noStore()
 	try {
-		await firestore.collection('reminder').doc(reminder.id).set({ reminder: reminder })
+		await firestore.collection('reminder').doc(reminder.id).set(reminder)
 	} catch (error) {
 		BUG && console.log('Error reminder collection', error)
 		throw new Error('Failed to update reminder.')

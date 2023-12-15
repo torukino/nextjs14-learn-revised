@@ -32,7 +32,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 		value: r.id,
 	}))
 
-	console.log('reminder:', JSON.stringify(reminder))
+	// console.log('reminder:', JSON.stringify(reminder))
 	return (
 		<form action={dispatch}>
 			<input type="hidden" name="id" defaultValue={reminder?.id || ''} />
@@ -50,7 +50,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 							onChange={handleReminderChange}
 							required
 							placeholder="摘要を選んでください"
-							defaultValue={{ label: reminder?.reminder || '', value: reminder?.id || '' }}
+							value={{ label: reminder.reminder || '', value: reminder.id || '' }}
 							styles={{
 								singleValue: provided => ({
 									...(provided as CSSProperties),
@@ -82,7 +82,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 									name="status"
 									type="radio"
 									value="auto"
-									checked={reminder?.status === 'auto'}
+									checked={reminder.status === '自動振替'}
 									onChange={e => setReminder({ ...reminder, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
@@ -99,7 +99,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 									name="status"
 									type="radio"
 									value="hand"
-									checked={reminder.status === 'hand'}
+									checked={reminder.status === '手動振込'}
 									onChange={e => setReminder({ ...reminder, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
@@ -116,7 +116,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 									name="status"
 									type="radio"
 									value="undef"
-									checked={reminder.status === 'undef'}
+									checked={reminder.status === '-'}
 									onChange={e => setReminder({ ...reminder, status: e.target.value })}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
@@ -159,15 +159,15 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 
 				{/* Invoice Amount */}
 				<div className="mb-4">
-					<label htmlFor="inAmount" className="mb-2 block text-sm font-medium">
+					<label htmlFor="inAmountStr" className="mb-2 block text-sm font-medium">
 						入金額
 					</label>
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
 							<input
-								id="inAmount"
-								name="inAmount"
-								type="number"
+								id="inAmountStr"
+								name="inAmountStr"
+								type="text"
 								step="1"
 								value={reminder.inAmountStr}
 								onChange={e => setReminder({ ...reminder, inAmountStr: Number(e.target.value).toLocaleString() })}
@@ -181,15 +181,15 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 
 				{/*  Amount */}
 				<div className="mb-4">
-					<label htmlFor="outAmount" className="mb-2 block text-sm font-medium">
+					<label htmlFor="outAmountStr" className="mb-2 block text-sm font-medium">
 						出勤額
 					</label>
 					<div className="relative mt-2 rounded-md">
 						<div className="relative">
 							<input
-								id="outAmount"
-								name="outAmount"
-								type="number"
+								id="outAmountStr"
+								name="outAmountStr"
+								type="text"
 								step="1"
 								value={reminder.outAmountStr}
 								onChange={e => setReminder({ ...reminder, outAmountStr: Number(e.target.value).toLocaleString() })}
@@ -203,7 +203,7 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 			</div>
 			<div className="mt-6 flex justify-end gap-4">
 				<Link
-					href="/dashboard/reminders"
+					href="/dashboard/customers"
 					className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
 				>
 					取消

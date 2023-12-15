@@ -14,7 +14,7 @@ import { signIn } from '@/auth'
 import { AuthError } from 'next-auth'
 import { z } from 'zod'
 import { REMINDER } from '@/types/reminder'
-const BUG = true
+const BUG = false
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
 	try {
@@ -42,7 +42,13 @@ export async function updateReminder(formData: FormData) {
 		status: formData.get('status'),
 	}
 
-	await updateReminderDB(data as REMINDER)
+	if (!data.id) {
+		const id = uuidv4()
+		const data_ = { ...data, id: id }
+		await updateReminderDB(data_ as REMINDER)
+	} else {
+		await updateReminderDB(data as REMINDER)
+	}
 
 	revalidatePath('/dashboard/customers')
 	redirect('/dashboard/customers')
@@ -79,10 +85,10 @@ export interface StateReminder {
 
 export async function createReminder(prevState: StateReminder, formData: FormData) {
 	const validatedFields = CreateReminder.safeParse({
-		reminder: formData.get('selectedReminder'),
+		reminder: formData.get('reminder'),
 		account: formData.get('account'),
-		inAmount: Number(formData.get('inAmount')),
-		outAmount: Number(formData.get('outAmount')),
+		inAmountStr: Number(formData.get('inAmountStr')).toLocaleString() || '',
+		outAmountStr: Number(formData.get('outAmountStr')).toLocaleString() || '',
 		status: formData.get('status'),
 	})
 
@@ -111,16 +117,24 @@ export async function createReminder(prevState: StateReminder, formData: FormDat
 	// 	outAmount: Number(formData.get('outAmount')),
 	// 	status: formData.get('status'),
 	// }
+	const id = uuidv4()
+	let status = ''
+	let inAmountStr = reminderFormData.inAmountStr
+	let outAmountStr = ''
+	if (reminderFormData.status === 'undef') status = '-'
+	if (reminderFormData.status === 'hand') status = '手動振込'
+	if (reminderFormData.status === 'auto') status = '自動振込'
+	if (inAmountStr === '0') inAmountStr = ''
+	if (outAmountStr === '0') outAmountStr = ''
 
-	await updateReminderDB(reminderFormData as REMINDER)
+	const reminderFormData_: REMINDER = { ...reminderFormData, id: id, status: status, inAmountStr: inAmountStr, outAmountStr: outAmountStr }
 
-	// // const n1 = newAllBank[newAllBank.length - 1]
-	// // const n2 = newAllBank[newAllBank.length - 2]
-	// // console.log(`${n2.date} 入金: ${n2.inM} 出金: ${n2.outM} 残高: ${n2.resM}`)
-	// // console.log(`${n1.date} 入金: ${n1.inM} 出金: ${n1.outM} 残高: ${n1.resM}`)
+	BUG && console.log('reminderFormData', JSON.stringify(reminderFormData_))
 
-	revalidatePath('/dashboard/invoices')
-	redirect('/dashboard/invoices')
+	await updateReminderDB(reminderFormData_ as REMINDER)
+
+	revalidatePath('/dashboard/customers')
+	redirect('/dashboard/customers')
 }
 
 export async function updateBank(formData: FormData) {

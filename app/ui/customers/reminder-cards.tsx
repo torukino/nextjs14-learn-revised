@@ -2,7 +2,7 @@ import { BanknotesIcon, ClockIcon, UserGroupIcon, InboxIcon } from '@heroicons/r
 import React from 'react'
 import { REMINDER } from '@/types/reminder'
 import { DeleteReminderButton, UpdateReminderButton } from '@/app/ui/customers/buttons'
-const BUG = true
+const BUG = false
 const iconMap = {
 	collected: BanknotesIcon,
 	customers: UserGroupIcon,
@@ -12,7 +12,11 @@ const iconMap = {
 
 export function Card({ reminder }: { reminder: REMINDER }) {
 	// const Icon = iconMap[type]
-	BUG && console.log(`reminder: ${JSON.stringify(reminder)} ${reminder.inAmountStr}`)
+	BUG && console.log(`reminder (in reminder-cards):`)
+	BUG && console.log(typeof reminder.reminder)
+	BUG && console.log(typeof reminder.account)
+	BUG && console.log(typeof reminder.status)
+
 	return (
 		<div className="rounded-xl bg-gray-50 p-2 shadow-sm">
 			<div className="flex p-4">{/* {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null} */}</div>
@@ -20,14 +24,14 @@ export function Card({ reminder }: { reminder: REMINDER }) {
 			<p className={`truncate rounded-xl bg-white text-center text-base`}>{reminder.account}</p>
 			<p className={`truncate rounded-xl bg-white text-center text-base`}>{reminder.status}</p>
 
-			{reminder.inAmountStr && (
+			{reminder?.inAmountStr && (
 				<p className={`truncate rounded-xl bg-blue-200 text-center text-base`}>
 					入金:
 					{reminder.inAmountStr}円
 				</p>
 			)}
 
-			{reminder.outAmountStr && (
+			{reminder?.outAmountStr && (
 				<p className={`truncate rounded-xl bg-red-200 text-center text-base`}>
 					出金:
 					{reminder.outAmountStr}円
