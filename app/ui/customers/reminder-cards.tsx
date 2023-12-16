@@ -18,21 +18,21 @@ export function Card({ reminder }: { reminder: REMINDER }) {
 	BUG && console.log(typeof reminder.status)
 
 	return (
-		<div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+		<div className="rounded-xl bg-gray-50 p-2 shadow-xl border-4 border-gray-200">
 			<div className="flex p-4">{/* {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null} */}</div>
-			<p className={`truncate rounded-xl bg-white py-2 text-center text-xl`}>{reminder.reminder}</p>
+			<p className={`truncate rounded-xl bg-yellow-50 py-2 text-center text-xl`}>{reminder.reminder}</p>
 			<p className={`truncate rounded-xl bg-white text-center text-base`}>{reminder.account}</p>
-			<p className={`truncate rounded-xl bg-white text-center text-base`}>{reminder.status}</p>
+			<p className={`truncate rounded-xl bg-purple-50 text-center text-base`}>{reminder.status}</p>
 
 			{reminder?.inAmountStr && (
-				<p className={`truncate rounded-xl bg-blue-200 text-center text-base`}>
+				<p className={`truncate rounded-xl bg-blue-100 text-center text-base`}>
 					入金:
 					{reminder.inAmountStr}円
 				</p>
 			)}
 
 			{reminder?.outAmountStr && (
-				<p className={`truncate rounded-xl bg-red-200 text-center text-base`}>
+				<p className={`truncate rounded-xl bg-red-100 text-center text-base`}>
 					出金:
 					{reminder.outAmountStr}円
 				</p>
