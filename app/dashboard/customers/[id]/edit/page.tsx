@@ -2,7 +2,7 @@ import Form from '@/app/ui/customers/edit-reminder-form'
 import { fetchAllReminders, fetchBankById, fetchReminderById, fetchReminders } from '@/app/lib/data'
 import Breadcrumbs from '@/app/ui/customers/breadcrumbs'
 import { REMINDER } from '@/types/reminder'
-const BUG = false
+const BUG = true
 export default async function Page({ params }: { params: { id: string } }) {
 	const reminders = await fetchAllReminders()
 	BUG && console.log('@@ reminders length:', reminders.length)

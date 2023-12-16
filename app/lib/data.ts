@@ -109,7 +109,7 @@ export async function fetchReminderById(id: string): Promise<REMINDER> {
 	noStore()
 	try {
 		const reminder = await firestore.collection('reminder').doc(id).get()
-		return reminder.data()?.reminder || initReminder
+		return reminder.data() as REMINDER
 	} catch (error) {
 		BUG && console.log('Error reminder collection', error)
 		throw new Error('Failed to fetch reminder.')

@@ -32,7 +32,9 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 		value: r.id,
 	}))
 
-	// console.log('reminder:', JSON.stringify(reminder))
+	console.log('reminder_:', JSON.stringify(reminder_))
+	console.log('selectedReminder:', selectedReminder)
+	console.log('selectedReminderId:', selectedReminderId)
 	return (
 		<form action={dispatch}>
 			<input type="hidden" name="id" defaultValue={reminder?.id || ''} />
