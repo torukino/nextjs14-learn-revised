@@ -3,7 +3,7 @@ import { fetchFilteredBank } from '@/app/lib/data'
 import { BANK } from '@/types/bank'
 
 export default async function BankTable({ reminder, currentPage }: { reminder: string; currentPage: number }) {
-	const fdata: BANK[] = await fetchFilteredBank(reminder, currentPage)
+	const banks: BANK[] = await fetchFilteredBank(reminder, currentPage)
 
 	return (
 		<div className="mt-6 flow-root">
@@ -89,8 +89,8 @@ export default async function BankTable({ reminder, currentPage }: { reminder: s
 							</tr>
 						</thead>
 						<tbody>
-							{fdata.map((b, index) => (
-								<tr key={index}>
+							{banks.map((b, index) => (
+								<tr key={b.id}>
 									<td className="relative py-4 pr-3 text-sm font-medium text-gray-900">{b.date}</td>
 									<td className="px-3 py-4 text-sm text-gray-500">{b.status}</td>
 									<td className="px-3 py-4 text-sm text-gray-500">{b.reminder}</td>

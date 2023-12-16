@@ -53,6 +53,15 @@ export async function fetchAllReminders(): Promise<REMINDER[]> {
 			console.log('Error getting all reminders', err)
 		})
 
+	BUG && console.log('data.length', data.length)
+	BUG &&
+		data.forEach(reminder => {
+			if (BUG && reminder.account === '群銀法人') {
+				console.log(`reminder (in fetchAllReminders):${reminder.id}}`)
+				console.log(`${reminder.reminder} ${reminder.account} ${reminder.inAmountStr} ${reminder.outAmountStr}`)
+			}
+		})
+
 	return data
 }
 

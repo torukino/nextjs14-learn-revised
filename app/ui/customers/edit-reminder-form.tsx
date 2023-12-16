@@ -41,8 +41,8 @@ export default function Form({ reminder_, reminders }: { reminder_: REMINDER; re
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
 				{/* 摘要を選ぶ */}
 				<div className="mb-4">
-					<input type="hidden" name="selectedReminder" value={selectedReminder || ''} />
-					<input type="hidden" name="selectedReminderId" value={selectedReminderId || ''} />
+					<input type="hidden" name="selectedReminder" defaultValue={selectedReminder || ''} />
+					<input type="hidden" name="selectedReminderId" defaultValue={selectedReminderId || ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
 					</label>

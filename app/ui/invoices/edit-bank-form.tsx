@@ -60,8 +60,8 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 
 				{/* 摘要を選ぶ */}
 				<div className="mb-4">
-					<input type="hidden" name="selectedReminder" value={selectedReminder || ''} />
-					<input type="hidden" name="selectedReminderId" value={selectedReminderId || ''} />
+					<input type="hidden" name="selectedReminder" defaultValue={selectedReminder || ''} />
+					<input type="hidden" name="selectedReminderId" defaultValue={selectedReminderId || ''} />
 					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
 						摘要を選んでください
 					</label>
@@ -71,7 +71,7 @@ export default function Form({ bank_, reminders }: { bank_: BANK; reminders: REM
 							onChange={handleReminderChange}
 							required
 							placeholder="摘要を選んでください"
-							defaultValue={{ label: bank.reminder||"", value: bank.reminderId||"" }}
+							defaultValue={{ label: bank.reminder || '', value: bank.reminderId || '' }}
 							styles={{
 								singleValue: provided => ({
 									...(provided as CSSProperties),

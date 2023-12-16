@@ -43,7 +43,7 @@ export default function FormSkelton() {
 									id="auto"
 									name="status"
 									type="radio"
-									value="auto"
+									defaultValue="auto"
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
@@ -58,7 +58,7 @@ export default function FormSkelton() {
 									id="hand"
 									name="status"
 									type="radio"
-									value="hand"
+									defaultValue="hand"
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
@@ -74,7 +74,7 @@ export default function FormSkelton() {
 									id="undef"
 									name="status"
 									type="radio"
-									value="undef"
+									defaultValue="undef"
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label

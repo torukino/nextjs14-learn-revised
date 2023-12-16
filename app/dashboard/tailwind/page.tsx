@@ -28,7 +28,7 @@ export default function Page() {
 					<p>form-control</p>
 					<div className="inline-flex">
 						<input type="text" className="form-control" placeholder="テキストフィールド" />
-						<input type="date" className="form-control" value="{{ today()->toDateString() }}" />
+						<input type="date" className="form-control" defaultValue="{{ today()->toDateString() }}" />
 						<select className="form-control">
 							<option value="1">オプション１</option>
 							<option value="2">オプション２</option>

@@ -12,14 +12,13 @@ const iconMap = {
 
 export function Card({ reminder }: { reminder: REMINDER }) {
 	// const Icon = iconMap[type]
-	BUG && console.log(`reminder (in reminder-cards):`)
-	BUG && console.log(typeof reminder.reminder)
-	BUG && console.log(typeof reminder.account)
-	BUG && console.log(typeof reminder.status)
-
+	if (BUG && reminder.account === '群銀法人') {
+		console.log(`reminder (in reminder-cards):`)
+		console.log(`${reminder.reminder} ${reminder.account} ${reminder.status} ${reminder.inAmountStr} ${reminder.outAmountStr}`)
+	}
 	return (
 		<div className="rounded-xl bg-gray-50 p-2 shadow-xl border-4 border-gray-200">
-			<div className="flex p-4">{/* {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null} */}</div>
+			<div className="flex flex-col">{/* {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null} */}</div>
 			<p className={`truncate rounded-xl bg-yellow-50 py-2 text-center text-xl`}>{reminder.reminder}</p>
 			<p className={`truncate rounded-xl bg-white text-center text-base`}>{reminder.account}</p>
 			<p className={`truncate rounded-xl bg-purple-50 text-center text-base`}>{reminder.status}</p>
@@ -38,7 +37,7 @@ export function Card({ reminder }: { reminder: REMINDER }) {
 				</p>
 			)}
 
-			<div>
+			<div className="flex justify-around">
 				<UpdateReminderButton reminder={reminder} />
 				<DeleteReminderButton id={reminder.id} />
 			</div>

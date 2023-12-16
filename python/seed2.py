@@ -15,17 +15,17 @@ docs = bank_ref.stream()
 reminder_list = []
 for doc in docs:
     # ['みずほ銀行', '群銀個人', '群銀コロナ', '群銀法人']
-    isAmountStr = ""
+    inAmountStr = ""
     outAmountStr = ""
     account = ""
     if doc.to_dict()['inM'] != "":
-        isAmountStr = doc.to_dict()['inM']
+        inAmountStr = doc.to_dict()['inM']
         account = "みずほ銀行"
     if doc.to_dict()['outM'] != "":
         outAmountStr = doc.to_dict()['outM']
         account = "みずほ銀行"
     if doc.to_dict()['inI'] != "":
-        isAmountStr = doc.to_dict()['inI']
+        inAmountStr = doc.to_dict()['inI']
         account = "群銀個人"
     if doc.to_dict()['outI'] != "":
         outAmountStr = doc.to_dict()['outI']
@@ -39,6 +39,7 @@ for doc in docs:
     if doc.to_dict()['inH'] != "":
         inAmountStr = doc.to_dict()['inH']
         account = "群銀法人"
+        print(doc.to_dict()['reminder'],":",inAmountStr)
     if doc.to_dict()['outH'] != "":
         outAmountStr = doc.to_dict()['outH']
         account = "群銀法人"
@@ -50,7 +51,7 @@ for doc in docs:
         "reminder": doc.to_dict()['reminder'],
         "status": doc.to_dict()['status'],
         "account": account,
-        "inAmountStr": isAmountStr,
+        "inAmountStr": inAmountStr,
         "outAmountStr":outAmountStr,
     }
     doc_ref.set(data)
