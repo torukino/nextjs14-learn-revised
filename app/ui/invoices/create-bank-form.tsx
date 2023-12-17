@@ -11,6 +11,10 @@ import { CSSProperties } from 'react'
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }
 	const [state, dispatch] = useFormState(createBank, initialState)
+	const [status, setStatus] = React.useState<string>('-')
+	const [account, setAccount] = React.useState<string>('')
+	const [inAmount, setInAmount] = React.useState<number | undefined>()
+	const [outAmount, setOutAmount] = React.useState<number | undefined>()
 
 	// リマインダーの状態を保存するためのReactの状態を作成します
 	const [selectedReminder, setSelectedReminder] = React.useState<string>()
@@ -23,6 +27,14 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 		if (selectedOption) {
 			setSelectedReminder(selectedOption.label)
 			setSelectedReminderId(selectedOption.value)
+			const reminder = reminders.find(r => r.id === selectedOption.value)
+			if (!!reminder) {
+				console.log(`reminder:${reminder.reminder}`)
+				setStatus(reminder.status)
+				setAccount(reminder.account)
+				!!reminder.inAmountStr && setInAmount(Number(reminder.inAmountStr))
+				!!reminder.outAmountStr && setOutAmount(Number(reminder.outAmountStr))
+			}
 		}
 	}
 
@@ -86,28 +98,6 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 					</div>
 				</div>
 
-				{/* 摘要を選ぶ
-				<div className="mb-4">
-					<label htmlFor="reminder" className="mb-2 block text-sm font-medium">
-						摘要を選んでください
-					</label>
-					<div className="relative">
-						<select
-							id="reminderId"
-							name="reminderId"
-							className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-						>
-							<option value="">選択してください</option>
-							{optionsReminder.map((option, index) => (
-								<option key={index} value={option.value}>
-									{option.label}
-								</option>
-							))}
-						</select>
-						<UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-					</div>
-				</div> */}
-
 				{/* 分類 */}
 				<fieldset>
 					<legend className="mb-2 block text-sm font-medium">分類</legend>
@@ -118,7 +108,9 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									id="auto"
 									name="status"
 									type="radio"
-									value="auto"
+									value="自動振替"
+									checked={status === '自動振替'}
+									onChange={e => setStatus(e.target.value)}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
@@ -133,7 +125,9 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									id="hand"
 									name="status"
 									type="radio"
-									value="hand"
+									value="手動振込"
+									checked={status === '手動振込'}
+									onChange={e => setStatus(e.target.value)}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
@@ -148,8 +142,9 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 									id="undef"
 									name="status"
 									type="radio"
-									value="undef"
-									defaultChecked={true} // ここにdefaultCheckedを使用します
+									value="-"
+									checked={status === '-'}
+									onChange={e => setStatus(e.target.value)}
 									className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
 								/>
 								<label
@@ -174,7 +169,8 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 						id="account"
 						name="account"
 						className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-						defaultValue=""
+						value={account}
+						onChange={e => setAccount(e.target.value)}
 					>
 						<option value="" disabled>
 							銀行口座の選択
@@ -203,6 +199,8 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							step="1"
 							placeholder="入金額を入力"
 							className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+							value={inAmount}
+							onChange={e => setInAmount(Number(e.target.value))}
 						/>
 						<CurrencyYenIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
 					</div>
@@ -220,6 +218,8 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							id="outAmount"
 							name="outAmount"
 							type="number"
+							value={outAmount}
+							onChange={e => setOutAmount(Number(e.target.value))}
 							step="1"
 							placeholder="出金額を入力"
 							className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
