@@ -1,4 +1,4 @@
-import { fetchBankPages, fetchReminders } from '@/app/lib/data'
+import { fetchBankPagesIncludingTheReminderString, fetchReminders } from '@/app/lib/data'
 import BankTable from '@/app/ui/invoices/bank-table'
 import { Suspense } from 'react'
 import Pagination from '@/app/ui/invoices/pagination'
@@ -18,9 +18,9 @@ export default async function Page({
 		page?: string
 	}
 }) {
-	const reminder = searchParams?.query || ''
+	const reminderString = searchParams?.query || ''
 	const currentPage = Number(searchParams?.page) || 1
-	const totalPages = await fetchBankPages(reminder)
+	const totalPages = await fetchBankPagesIncludingTheReminderString(reminderString)
 
 	if (remindersInit) {
 		const reminders: REMINDER[] = await fetchReminders()
@@ -38,8 +38,8 @@ export default async function Page({
 					<CreateBank />
 				</div>
 
-				<Suspense key={reminder + currentPage} fallback={<BanksSkeleton />}>
-					<BankTable reminder={reminder} currentPage={currentPage} />
+				<Suspense key={reminderString + currentPage} fallback={<BanksSkeleton />}>
+					<BankTable reminder={reminderString} currentPage={currentPage} />
 				</Suspense>
 				<div className="mt-5 flex w-full justify-center">
 					<Pagination totalPages={totalPages} />

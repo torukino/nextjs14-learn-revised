@@ -39,6 +39,26 @@ export async function fetchReminderByReminderId(id: string): Promise<REMINDER> {
 	return reminder
 }
 
+export async function fetchFilteredReminders({ reminderString }: { reminderString: string }): Promise<REMINDER[]> {
+	const reminderString_ = reminderString.trim()
+	const data: REMINDER[] = []
+	await firestore
+		.collection('reminder')
+		.get()
+		.then(querySnapshot => {
+			querySnapshot.forEach(doc => {
+				data.push(doc.data() as REMINDER)
+			})
+		})
+		.catch(err => {
+			console.log('Error getting all reminders', err)
+		})
+
+	const dataFiltered: REMINDER[] = data.filter(d => (!!reminderString_ ? d.reminder.includes(reminderString_) : true))
+
+	return dataFiltered
+}
+
 export async function fetchAllReminders(): Promise<REMINDER[]> {
 	const data: REMINDER[] = []
 	await firestore
@@ -192,33 +212,31 @@ export async function fetchAllBank(): Promise<any[]> {
 
 const BANK_ITEMS_PER_PAGE = 6
 export async function fetchFilteredBank(reminder: string, currentPage: number) {
+	const reminder_ = reminder.trim()
 	const offset = (currentPage - 1) * BANK_ITEMS_PER_PAGE
-	const data = await fetchAllBank()
-	console.log('data.length', data.length)
-	const reminders: string[] = data.map(d => d.reminder)
-	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
-	const filteredReminders = reminders.filter(r => r.includes(reminder))
-	// filteredRemindersを有するdataを抽出
-	const filteredData = data.filter(d => filteredReminders.includes(d.reminder))
-
+	const data: BANK[] = await fetchAllBank()
+	const filterdBankData: BANK[] = data.filter(d => {
+		BUG && console.log(`fetchFilteredBank d.reminder:(${typeof d.reminder}) ${d.reminder} reminder_:${reminder_}`)
+		if (BUG && typeof d.reminder !== 'string') console.log(`@@ alert @@ type of d.reminder = ${typeof d.reminder} id=${d.id}`)
+		BUG && console.log(`fetchFilteredBank ["${d.reminder}"].includes("${reminder_}")=${(!!reminder_ ? d.reminder.includes(reminder_) : true).toString()}`)
+		return !!reminder_ ? d.reminder.includes(reminder_) : true
+	})
 	let data_: BANK[] = []
 	if (data.length > BANK_ITEMS_PER_PAGE) {
-		data_ = filteredData.slice(offset, offset + BANK_ITEMS_PER_PAGE)
+		data_ = filterdBankData.slice(offset, offset + BANK_ITEMS_PER_PAGE)
 	} else {
-		data_ = filteredData
+		data_ = filterdBankData
 	}
 
 	return data_
 }
 
-export async function fetchBankPages(reminder: string) {
+export async function fetchBankPagesIncludingTheReminderString(reminder: string): Promise<number> {
+	const reminder_ = reminder.trim()
 	const data: BANK[] = await fetchAllBank()
-	const reminders: string[] = data.map(d => d.reminder)
-	// 変数 filteredReminders に、reminders の中から、reminder と部分一致する要素を抽出した配列を抽出
-	const filteredReminders = reminders.filter((r: string) => r.includes(reminder))
-	// filteredRemindersを有するdataを抽出
-	const filteredData = data.filter(d => filteredReminders.includes(d.reminder))
-	const totalPages = Math.ceil(filteredData.length / BANK_ITEMS_PER_PAGE)
+	const filterdBankData: BANK[] = data.filter(d => (!!reminder_ ? d.reminder.includes(reminder_) : true))
+	const totalPages = Math.ceil(filterdBankData.length / BANK_ITEMS_PER_PAGE)
+	BUG && console.log('fetchBankPagesIncludingTheReminderString totalPages:', totalPages)
 	return totalPages
 }
 

@@ -1,7 +1,13 @@
 import { CreateReminder } from '@/app/ui/customers/buttons'
 import ReminderTable from '@/app/ui/customers/reminder-table'
 import { SearchReminder } from '@/app/ui/search'
-export default function Page() {
+
+interface SERACHPARAMS {
+	query?: string
+}
+export default function Page({ searchParams }: { searchParams: SERACHPARAMS }) {
+	const reminderString = searchParams?.query || ''
+
 	return (
 		<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 			<h1 className="text-2xl ">摘要</h1>
@@ -10,7 +16,7 @@ export default function Page() {
 				<CreateReminder />
 			</div>
 			<div>
-				<ReminderTable />
+				<ReminderTable reminderString={reminderString} />
 			</div>
 		</div>
 	)

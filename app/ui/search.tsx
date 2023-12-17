@@ -19,7 +19,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 			params.delete('query')
 		}
 		replace(`${pathname}?${params.toString()}`)
-		// console.log('qqqq', params.get('query'))
+		console.log('qqqq', params.get('query'))
 	}, 300)
 
 	return (
@@ -40,8 +40,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
 	)
 }
 
-
-export  function SearchReminder({ placeholder }: { placeholder: string }) {
+export function SearchReminder({ placeholder }: { placeholder: string }) {
 	const searchParams = useSearchParams()
 	const pathname = usePathname()
 	const { replace } = useRouter()

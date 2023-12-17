@@ -1,19 +1,17 @@
-import { fetchAllBank, fetchAllReminders } from '@/app/lib/data'
-import { BANK, BANKPLUS } from '@/types/bank'
-import { BanknotesIcon, ClockIcon, UserGroupIcon, InboxIcon } from '@heroicons/react/24/outline'
-import { lusitana } from '@/app/ui/fonts'
+import { fetchAllBank, fetchAllReminders, fetchFilteredReminders } from '@/app/lib/data'
 
 import { REMINDER } from '@/types/reminder'
 import { Card } from '@/app/ui/customers/reminder-cards'
 const BUG = true
 
-export default async function ReminderTable() {
-	const reminders: REMINDER[] = await fetchAllReminders()
+export default async function ReminderTable({ reminderString }: { reminderString: string }) {
+	const reminders: REMINDER[] = await fetchFilteredReminders({ reminderString })
+
+	BUG && console.log(`reminderString ${reminderString} length: ${reminders.length}`)
 	BUG &&
 		reminders.forEach(r => {
 			if (typeof r.reminder !== 'string') console.log(`reminder:${JSON.stringify(r.reminder)} typeof reminder (in reminder-table): ${typeof r.reminder}`)
 		})
-	BUG && console.log('reminders length:', reminders.length)
 	BUG &&
 		reminders.forEach(reminder => {
 			if (BUG && reminder.account === '群銀法人') {
