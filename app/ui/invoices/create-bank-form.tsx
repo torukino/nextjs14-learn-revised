@@ -8,6 +8,9 @@ import { createBank } from '@/app/lib/actions'
 import { useFormState } from 'react-dom'
 import CreatableSelect from 'react-select/creatable'
 import { CSSProperties } from 'react'
+
+const BUG = true
+
 export default function Form({ reminders }: { reminders: REMINDER[] }) {
 	const initialState = { message: null, errors: {} }
 	const [state, dispatch] = useFormState(createBank, initialState)
@@ -22,14 +25,15 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 
 	// // 選択されたリマインダーを状態として保存するonChangeハンドラを作成します
 	function handleReminderChange(selectedOption: { label: string; value: string } | null) {
-		selectedOption && console.log(`selectedOption, label:${selectedOption.label}, value:${selectedOption.value}`)
+		BUG && selectedOption && console.log(`selectedOption, label:${selectedOption.label}, value:${selectedOption.value}`)
 
 		if (selectedOption) {
 			setSelectedReminder(selectedOption.label)
 			setSelectedReminderId(selectedOption.value)
 			const reminder = reminders.find(r => r.id === selectedOption.value)
 			if (!!reminder) {
-				console.log(`reminder:${reminder.reminder}`)
+				BUG &&
+					console.log(`@@ reminder:${reminder.reminder} account ${reminder.account} ${reminder.status} in ${reminder.inAmountStr} out ${reminder.outAmountStr}`)
 				setStatus(reminder.status)
 				setAccount(reminder.account)
 				!!reminder.inAmountStr && setInAmount(Number(reminder.inAmountStr))
@@ -199,7 +203,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							step="1"
 							placeholder="入金額を入力"
 							className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-							value={inAmount}
+							value={inAmount || 0}
 							onChange={e => setInAmount(Number(e.target.value))}
 						/>
 						<CurrencyYenIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -218,7 +222,7 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 							id="outAmount"
 							name="outAmount"
 							type="number"
-							value={outAmount}
+							value={outAmount || 0}
 							onChange={e => setOutAmount(Number(e.target.value))}
 							step="1"
 							placeholder="出金額を入力"

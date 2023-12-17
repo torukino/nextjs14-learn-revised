@@ -244,7 +244,7 @@ export async function createBank(prevState: State, formData: FormData) {
 	// "reminder":"9gSENJ0WAodVHvVxHBXg","account":"みずほ銀行","inAmount":200,"outAmount":0,
 	// "status":"hand"}
 	const reminderId = validatedFields.data.reminderId
-	let reminder = await fetchReminderById(reminderId)
+	let reminder: REMINDER = await fetchReminderById(reminderId)
 	if (!reminder) {
 		const id = uuidv4()
 		const newReminder: REMINDER = {
@@ -258,7 +258,7 @@ export async function createBank(prevState: State, formData: FormData) {
 
 		updateReminderDB(newReminder)
 	}
-	const rawFormData = { ...validatedFields.data, reminder: reminder }
+	const rawFormData = { ...validatedFields.data, reminder: reminder.reminder }
 
 	// const rawFormData = {
 	// 	date: formData.get('date'),
