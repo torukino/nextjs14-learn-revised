@@ -36,8 +36,8 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 					console.log(`@@ reminder:${reminder.reminder} account ${reminder.account} ${reminder.status} in ${reminder.inAmountStr} out ${reminder.outAmountStr}`)
 				setStatus(reminder.status)
 				setAccount(reminder.account)
-				!!reminder.inAmountStr && setInAmount(Number(reminder.inAmountStr))
-				!!reminder.outAmountStr && setOutAmount(Number(reminder.outAmountStr))
+				setInAmount(Number(reminder.inAmountStr.replaceAll(',', '') || '0'))
+				setOutAmount(Number(reminder.outAmountStr.replaceAll(',', '') || '0'))
 			}
 		}
 	}
@@ -47,7 +47,8 @@ export default function Form({ reminders }: { reminders: REMINDER[] }) {
 		label: r.reminder,
 		value: r.id,
 	}))
-	// console.log('reminders', optionsReminder)
+	console.log('outAmount', outAmount)
+	console.log('inAmount', inAmount)
 	return (
 		<form action={dispatch}>
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
