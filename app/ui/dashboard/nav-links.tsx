@@ -16,6 +16,7 @@ const links = [
 	},
 	{ name: '摘要リスト', href: '/dashboard/customers', icon: UserGroupIcon },
 	{ name: 'tailwind練習', href: '/dashboard/tailwind', icon: BookOpenIcon },
+	{ name: 'Icon MUI', href: '/dashboard/icons', icon: BookOpenIcon },
 ]
 
 export default function NavLinks() {
