@@ -2,28 +2,42 @@
 import React, { useEffect } from 'react'
 import * as Icons from '@mui/icons-material'
 import { useSearchParams } from 'next/navigation'
+import Pagination from '@/app/ui/Icon/pagination'
 
 const IconMui = () => {
 	const [selectedIcons, setSelectedIcons] = React.useState<string[]>([])
 	const [num, setNum] = React.useState<number>(0)
 	const [char, setChar] = React.useState<string>('')
 	const [icons, setIcons] = React.useState<string[]>([])
+	const [totalPages, setTotalPages] = React.useState<number>(0)
+
 	const searchParams = useSearchParams()
 	useEffect(() => {
+		const LIMIT: number = 50
 		const params = new URLSearchParams(searchParams)
 		const query = params.get('query')
+		const page = params.get('page')
+		const currentPage: number = Number(page) || 1
 		// console.log('@@ query', query)
 		setChar(query || '')
 		const icons_ = Object.keys(Icons)
 		//　icons_の中でqueryとの部分一致するものを抽出
 		const icons: string[] = icons_.filter(icon => icon.toLowerCase().includes(query?.toLowerCase() || ''))
-		// console.log('@@ icons', icons)
-		setNum(icons.length)
+		const num = icons.length
+		setNum(num)
+		const totalPages_ = Math.ceil(num / LIMIT)
+		setTotalPages(totalPages_)
+
 		let selectedIcons_: string[] = []
-		if (icons.length > 0 && icons.length > 100) {
-			selectedIcons_ = icons.slice(0, 100)
-		} else {
-			selectedIcons_ = icons
+		if (icons.length > 0) {
+			if (icons.length > 50) {
+				const start = (currentPage - 1) * LIMIT
+				const end = start + LIMIT
+				selectedIcons_ = icons.slice(start, end)
+			} else {
+				selectedIcons_ = icons
+			}
+			setSelectedIcons(selectedIcons_)
 		}
 
 		if (icons.length > 0 && icons.length < 2) {
@@ -31,8 +45,6 @@ const IconMui = () => {
 		} else {
 			setIcons(icons.slice(0, 2))
 		}
-
-		setSelectedIcons(selectedIcons_)
 	}, [searchParams])
 
 	return (
@@ -58,6 +70,9 @@ const IconMui = () => {
 						</div>
 					)
 				})}
+			</div>
+			<div className="mt-4">
+				<Pagination totalPages={totalPages} />
 			</div>
 		</div>
 	)
