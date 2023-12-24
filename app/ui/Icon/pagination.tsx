@@ -17,11 +17,11 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 		return `${pathname}?${params.toString()}`
 	}
 
-	console.log('@@ createPageURL(currentPage-1)', createPageURL(currentPage-1))
+	// console.log('@@ createPageURL(currentPage-1)', createPageURL(currentPage-1))
 
 	const allPages = generatePagination(currentPage, totalPages)
 
-	console.log('@@ allPages', allPages)
+	// console.log('@@ allPages', allPages)
 
 	return (
 		<>
