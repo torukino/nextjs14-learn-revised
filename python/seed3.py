@@ -45,8 +45,3 @@ for doc in docs:
             #　以下、"bank"collectionの同じidのdocumentに上書き登録する
             doc_ref = db.collection('bank').document(doc.id)
             doc_ref.set(org)
-            
-
-        
-
-    

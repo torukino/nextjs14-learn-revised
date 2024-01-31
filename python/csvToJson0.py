@@ -8,7 +8,7 @@ import json
 
 # CSVファイルを読み込む
 
-f = open('public/bank.csv', 'r', encoding='utf-8-sig')
+f = open('public/data-bank/bank.csv', 'r', encoding='utf-8-sig')
 
 reader = csv.reader(f)
 # CSVファイルを閉じる
